@@ -12,7 +12,6 @@ class User(AbstractUser):
 class Category(models.Model):
 	name = models.CharField(max_length=30)
 
-
 class Therapist(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	address = models.TextField()
