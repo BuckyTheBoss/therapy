@@ -15,7 +15,8 @@ def doctor_index(request):
 	'''this will have the initial chat space'''
 	return render(request, 'doctor_index.html')
 
-
+def index(request):
+	return render(request, 'index.html')
 
 
 
