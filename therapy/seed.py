@@ -22,6 +22,9 @@ def gen_sentance():
 def pick_user():
 	return random.choice(User.objects.all())
 
+def gen_address():
+	return fake.address()
+
 def gen_datetime(datetime=None):
 	if datetime != None:
 		return fake.date_time_between(start_date=datetime, end_date="-18d", tzinfo=None)
@@ -30,17 +33,24 @@ def gen_datetime(datetime=None):
 def gen_birthdate():
 	return fake.date_this_century(before_today=True, after_today=False)
 
-def pick_category():
+def pick_category(category=None):
+	if category != None:
+		return random.choice(Category.objects.exclude(name=category.name).all())
 	return random.choice(Category.objects.all())
 
 def create_patient_users(number):
 	'''create x users'''
+	users = []
 	for i in range(0, number):
+		password = gen_password()
 		fname = gen_fname()
 		lname = gen_lname()
 		username = fname.lower() + lname.lower()
-		user = User.objects.create_user(username=username, password=gen_password(), first_name=fname, last_name=lname, is_patient=True)
+		user = User.objects.create_user(username=username, password=password, first_name=fname, last_name=lname, is_patient=True)
 		user.save()
+		userdict = {'username' : username, 'password' : password}
+		users.append(userdict)
+	print(users)
 
 def seed_patient_profile():
 	for profile in Patient.objects.all():
@@ -56,3 +66,44 @@ def create_categories():
 		cat = Category(name=word)
 		cat.save()
 
+
+def seed_therapist():
+	for profile in Therapist.objects.all():
+		category1 = pick_category()
+		category2 = pick_category(category1)
+		profile.category.add(category1, category2)
+		profile.bio = gen_paragraph()
+		profile.birthdate = gen_birthdate()
+		profile.gender = random.choice(['M','F']) 
+		profile.address = gen_address()
+		profile.experience = random.randint(1,15)
+		profile.languages = random.choice(['English', 'Hebrew', 'Klingon', 'Elvish'])
+		profile.save()
+
+
+def create_therapist_users(number):
+	'''create x users'''
+	users = []
+	for i in range(0, number):
+		password = gen_password()
+		fname = gen_fname()
+		lname = gen_lname()
+		username = fname.lower() + lname.lower()
+		user = User.objects.create_user(username=username, password=password, first_name=fname, last_name=lname, is_patient=False)
+		user.save()
+		userdict = {'username' : username, 'password' : password}
+		users.append(userdict)
+	print(users)
+
+if Category.objects.all().count() == 0:
+	create_categories()
+
+
+if Therapist.objects.all().count() == 0:
+	create_therapist_users(10)
+	seed_therapist()
+
+
+if Patient.objects.all().count() == 0:
+	create_patient_users(10)
+	seed_patient_profile()
