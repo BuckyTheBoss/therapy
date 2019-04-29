@@ -1,5 +1,10 @@
 from django.shortcuts import render
+
+from .models import Therapist , Patient
+
+
 from .models import Therapist
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.views.generic import CreateView
@@ -8,9 +13,9 @@ from django.core.mail import send_mail
 
 
 # Create your views here.
-def profile_edit(request):
-	send_mail('test title', 'test email for theratinder','theratinder@gmail.com',['ozkilim@hotmail.co.uk'],fail_silently=False)
-	return render(request, 'profile_edit.html')
+def profile_edit(request,id):
+	patients = Patient.objects.filter(id=id)
+	return render(request, 'profile_edit.html' ,{'patients' : patients})
 
 def doctor_profile_edit(request):
 	return render(request, 'doctor_profile_edit.html')
@@ -35,6 +40,9 @@ def signup(request):
 			user = form.save(commit=False)
 			user.is_patient=True
 			user.save()
+			print(user.email)
+			'''put the email from the form into the sending'''
+			send_mail('test title', 'test email for theratinder','theratinder@gmail.com',['ozkilim@hotmail.co.uk'],fail_silently=False)
 			return redirect('index') #should redirect to dead end page until user confirms email
 	form = CustomUserCreationForm()
 	return render(request, 'registration/signup.html', {'form' : form})

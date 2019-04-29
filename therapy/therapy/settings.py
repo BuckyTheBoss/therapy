@@ -141,6 +141,8 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 # EMAIL_USE_SSL = False
 
 
-
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 
