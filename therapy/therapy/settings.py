@@ -130,3 +130,17 @@ LOGIN_URL = '/login'
 
 LOGOUT_REDIRECT_URL = '/'
 AUTH_USER_MODEL = "main.User"
+
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'theratinder@gmail.com'
+EMAIL_HOST_PASSWORD = 'theratinder123'
+EMAIL_USE_TLS = True
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+# EMAIL_USE_SSL = False
+
+
+
+
+

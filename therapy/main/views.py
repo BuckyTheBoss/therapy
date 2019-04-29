@@ -5,11 +5,12 @@ from .models import Therapist
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.views.generic import CreateView
-
+from django.core.mail import send_mail
 
 
 # Create your views here.
 def profile_edit(request):
+	send_mail('test title', 'test email for theratinder','theratinder@gmail.com',['ozkilim@hotmail.co.uk'],fail_silently=False)
 	return render(request, 'profile_edit.html')
 
 def doctor_profile_edit(request):
