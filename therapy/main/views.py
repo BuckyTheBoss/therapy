@@ -1,6 +1,6 @@
 
 from django.shortcuts import render
-from .models import Therapist
+from .models import Therapist , Patient
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
@@ -9,9 +9,10 @@ from django.core.mail import send_mail
 
 
 # Create your views here.
-def profile_edit(request):
+def profile_edit(request,id):
+	patients = Patient.objects.filter(id=id)
 	send_mail('test title', 'test email for theratinder','theratinder@gmail.com',['ozkilim@hotmail.co.uk'],fail_silently=False)
-	return render(request, 'profile_edit.html')
+	return render(request, 'profile_edit.html' ,{'patients' : patients})
 
 def doctor_profile_edit(request):
 	return render(request, 'doctor_profile_edit.html')
