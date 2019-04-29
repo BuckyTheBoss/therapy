@@ -1,3 +1,14 @@
+import os
+import random
+import django
+from faker import Faker
+import imdb
+
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'therapy.settings')
+
+django.setup()
+
 from main.models import *
 from faker import Faker
 import random
