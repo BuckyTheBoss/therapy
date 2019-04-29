@@ -40,9 +40,12 @@ def signup(request):
 			user = form.save(commit=False)
 			user.is_patient=True
 			user.save()
-			print(user.email)
-			'''put the email from the form into the sending'''
-			send_mail('test title', 'test email for theratinder','theratinder@gmail.com',['ozkilim@hotmail.co.uk'],fail_silently=False)
+			'''hashing process here to give link'''
+			send_mail('Congratulations on signing up to theratinder', 'Click the confirmation in order to login to your profile {}'.format('login'),'theratinder@gmail.com',[user.email],fail_silently=False)
 			return redirect('index') #should redirect to dead end page until user confirms email
 	form = CustomUserCreationForm()
 	return render(request, 'registration/signup.html', {'form' : form})
+
+
+
+
