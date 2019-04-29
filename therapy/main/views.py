@@ -1,10 +1,14 @@
-
 from django.shortcuts import render
+
 from .models import Therapist , Patient
 
+
+from .models import Therapist
+
 from django.shortcuts import render, redirect
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from django.views.generic import CreateView
+from .forms import CustomUserCreationForm
 from django.core.mail import send_mail
 
 
@@ -30,4 +34,13 @@ def index(request):
 	return render(request, 'index.html')
 
 
-
+def signup(request):
+	if request.method == 'POST':
+		form = CustomUserCreationForm(request.POST)
+		if form.is_valid():
+			user = form.save(commit=False)
+			user.is_patient=True
+			user.save()
+			return redirect('index') #should redirect to dead end page until user confirms email
+	form = CustomUserCreationForm()
+	return render(request, 'registration/signup.html', {'form' : form})
