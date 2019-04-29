@@ -12,24 +12,23 @@ class User(AbstractUser):
 class Category(models.Model):
 	name = models.CharField(max_length=30)
 
-
 class Therapist(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
-	address = models.TextField()
-	experience = models.IntegerField()
-	education = models.CharField(max_length=30)
-	languages = models.CharField(max_length=30)
+	address = models.TextField(null=True)
+	experience = models.IntegerField(null=True)
+	education = models.CharField(max_length=30, null=True)
+	languages = models.CharField(max_length=30, null=True)
 	category = models.ManyToManyField(Category)
-	gender = models.CharField(max_length=30)
-	birthdate = models.DateTimeField()
-	bio = models.TextField()
+	gender = models.CharField(max_length=30, null=True)
+	birthdate = models.DateTimeField(null=True)
+	bio = models.TextField(null=True)
 
 class Patient(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	category = models.ManyToManyField(Category)
-	gender = models.CharField(max_length=30)
-	birthdate = models.DateTimeField()
-	bio = models.TextField()
+	gender = models.CharField(max_length=30, null=True)
+	birthdate = models.DateTimeField(null=True)
+	bio = models.TextField(null=True)
 
 
 @receiver(post_save, sender=User)

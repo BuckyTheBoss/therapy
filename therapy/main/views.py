@@ -1,5 +1,12 @@
+
 from django.shortcuts import render
 from .models import Therapist
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import login
+from django.views.generic import CreateView
+
+
 
 # Create your views here.
 def profile_edit(request):
@@ -19,9 +26,6 @@ def doctor_index(request):
 
 def index(request):
 	return render(request, 'index.html')
-
-
-
 
 
 
