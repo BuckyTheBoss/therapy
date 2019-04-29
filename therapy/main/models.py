@@ -23,6 +23,7 @@ class Therapist(models.Model):
 	birthdate = models.DateTimeField(null=True)
 	bio = models.TextField(null=True)
 
+
 class Patient(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	category = models.ManyToManyField(Category)
@@ -38,6 +39,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 	else:
 		Therapist.objects.get_or_create(user = instance)
 	
+
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
 	if instance.is_patient:
@@ -45,26 +47,26 @@ def save_user_profile(sender, instance, **kwargs):
 	else:
 		Therapist.objects.get_or_create(user = instance)
 
-class Match(models.Model):
 
+class Match(models.Model):
 	patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
 	therapist = models.ForeignKey(Therapist, on_delete=models.CASCADE)
 	timestamp = models.DateTimeField(default=timezone.now)
 
-class TherapySession(models.Model):
 
+class TherapySession(models.Model):
 	match = models.ForeignKey(Match, on_delete=models.CASCADE)
 	datetime = models.DateTimeField()
 	occured = models.BooleanField()
 
-class SessionLog(models.Model):
 
+class SessionLog(models.Model):
 	therapist_notes = models.TextField()
 	patient_notes = models.TextField()
 	therapysession = models.ForeignKey(TherapySession, on_delete=models.SET_NULL, null=True)
 
-class Questionnaire(models.Model):
 
+class Questionnaire(models.Model):
 	q1 = models.TextField()
 	q2 = models.TextField()
 	q3 = models.TextField()
@@ -76,3 +78,4 @@ class Questionnaire(models.Model):
 	a4 = models.TextField()
 	a5 = models.TextField()
 	match = models.ForeignKey(Match, on_delete=models.CASCADE)
+
