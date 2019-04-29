@@ -31,7 +31,10 @@ def doctor_index(request):
 
 def index(request):
 	therapists = Therapist.objects.all()
-	'''queeris here'''
+	'''queeris here button to redrect to 
+	patient_matched_index when you have started an interaction with acouncilor
+	 after a chat this will show up in the navbar if logged in and have assined councilor'''
+
 	return render(request, 'index.html',{'therapists' : therapists})
 
 
@@ -47,6 +50,12 @@ def signup(request):
 			return redirect('index') #should redirect to dead end page until user confirms email
 	form = CustomUserCreationForm()
 	return render(request, 'registration/signup.html', {'form' : form})
+
+
+
+def patient_matched_index(request):
+	
+	return render(request, 'patient_matched_index.html')
 
 
 
