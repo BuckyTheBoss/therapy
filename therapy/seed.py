@@ -4,6 +4,7 @@ import django
 from faker import Faker
 
 
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'therapy.settings')
 
 django.setup()

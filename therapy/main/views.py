@@ -30,7 +30,9 @@ def doctor_index(request):
 	return render(request, 'doctor_index.html')
 
 def index(request):
-	return render(request, 'index.html')
+	therapists = Therapist.objects.all()
+	'''queeris here'''
+	return render(request, 'index.html',{'therapists' : therapists})
 
 
 def signup(request):
