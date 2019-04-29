@@ -5,6 +5,7 @@
 
 <div class="list-group">
 
+
 {% for therapist in therapists %}
   <div class='mt-1'>
   <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
@@ -13,12 +14,25 @@
       <img src="https://www.computerhope.com/cdn/computer-hope.jpg" width="40" height="40" alt="therapist">
     </div>
     <p class="mb-1">{{ therapist.bio }}</p>
+
+  <div>
+  <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">List group item heading</h5>
+      <small>3 days ago</small>
+    </div>
+    <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+
     <small>Donec id elit non mi porta.</small>
   </a>
 </div>
 
 
+
  
+
+
+ {% for therapist in therapists %}
 
 
   {% endfor %}
