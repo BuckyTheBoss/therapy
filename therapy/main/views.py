@@ -8,14 +8,16 @@ from .models import Therapist
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.views.generic import CreateView
-from .forms import CustomUserCreationForm
+from .forms import *
 from django.core.mail import send_mail
 
 
 # Create your views here.
 def profile_edit(request,id):
-	patients = Patient.objects.filter(id=id)
-	return render(request, 'profile_edit.html' ,{'patients' : patients})
+	patient = Patient.objects.filter(id=id).first()
+	form = PatientForm(instance=patient)
+	form2 = UserForm(instance=patient.user)
+	return render(request, 'profile_edit.html' ,{'patient' : patient, 'form' : form, 'form2' : form2})
 
 def doctor_profile_edit(request):
 	return render(request, 'doctor_profile_edit.html')
