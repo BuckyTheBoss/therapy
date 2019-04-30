@@ -21,7 +21,7 @@ class Therapist(models.Model):
 	experience = models.IntegerField(null=True)
 	education = models.CharField(max_length=30, null=True)
 	languages = models.CharField(max_length=30, null=True)
-	category = models.ManyToManyField(Category)
+	categories = models.ManyToManyField(Category)
 	gender = models.CharField(max_length=30, null=True)
 	birthdate = models.DateTimeField(null=True)
 	bio = models.TextField(null=True)
@@ -29,7 +29,7 @@ class Therapist(models.Model):
 
 class Patient(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
-	category = models.ManyToManyField(Category)
+	categories = models.ManyToManyField(Category)
 	gender = models.CharField(max_length=30, null=True)
 	birthdate = models.DateTimeField(null=True)
 	bio = models.TextField(null=True)
@@ -41,7 +41,6 @@ def create_user_profile(sender, instance, created, **kwargs):
 		Patient.objects.get_or_create(user = instance)
 	else:
 		Therapist.objects.get_or_create(user = instance)
-	
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
@@ -49,7 +48,6 @@ def save_user_profile(sender, instance, **kwargs):
 		instance.patient.save()
 	else:
 		Therapist.objects.get_or_create(user = instance)
-
 
 class Match(models.Model):
 	patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
