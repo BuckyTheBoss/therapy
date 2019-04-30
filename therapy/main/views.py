@@ -78,3 +78,5 @@ def patient_chat(request, therapist_id):
 # 		return redirect('index')
 
 
+
+
