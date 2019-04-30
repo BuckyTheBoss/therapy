@@ -12,6 +12,9 @@ class User(AbstractUser):
 class Category(models.Model):
 	name = models.CharField(max_length=30)
 
+	def __str__(self):
+		return f"{self.name}"
+
 class Therapist(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	address = models.TextField(null=True)
@@ -79,3 +82,13 @@ class Questionnaire(models.Model):
 	a5 = models.TextField()
 	match = models.ForeignKey(Match, on_delete=models.CASCADE)
 
+class Chat(models.Model):
+	patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+	therapist = models.ForeignKey(Therapist, on_delete=models.CASCADE)
+
+
+class Message(models.Model):
+	content = models.TextField()
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
+	timestamp = models.DateTimeField(default=timezone.now)
