@@ -63,6 +63,22 @@ def front(request):
 	'''this will have the initial chat space'''
 	return render(request, 'front.html')
 
+def patient_chat(request, therapist_id):
+	chat = Chat.objects.filter(therapist__id=therapist_id).filter(patient__id=request.user.patient.id).first()
+	if request.user.is_patient and chat == None:
+		chat = Chat(therapist=Therapist.objects.get(pk=therapist_id), patient=request.user.patient)
+		chat.save()
+	if request.method == 'POST':
+		message = Message(chat=chat, content=request.POST.get('content'), user=request.user)
+		message.save()
+	return render(request, 'chat.html', {'chat' : chat})
+
+
+# def therapist_chat(request, chat_id)
+# 	chat = Chat.objects.filter(pk=chat_id)
+# 	if chat.therapist != request.user.therapist:
+# 		#flash message "not your caht to see"
+# 		return redirect('index')
 
 
 
