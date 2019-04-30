@@ -34,6 +34,10 @@ class Patient(models.Model):
 	birthdate = models.DateTimeField(null=True)
 	bio = models.TextField(null=True)
 
+	def patient_profile_incomplete(self):
+		if (self.category == None) or (self.gender == None) or (self.birthdate == None) or (self.bio == None):
+			return True
+
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -41,7 +45,6 @@ def create_user_profile(sender, instance, created, **kwargs):
 		Patient.objects.get_or_create(user = instance)
 	else:
 		Therapist.objects.get_or_create(user = instance)
-	
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
