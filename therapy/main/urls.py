@@ -17,6 +17,7 @@ urlpatterns = [
     path('index', views.index, name='index'),
     path('signup/patient/', views.signup, name='patient_signup'),
     path('patient_matched_index', views.patient_matched_index, name='patient_matched_index'),
+    path('front', views.front, name='front'),
 ]
 
 
