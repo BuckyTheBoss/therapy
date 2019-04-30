@@ -10,8 +10,14 @@ def profile_edit(request,id):
 	patient = Patient.objects.filter(id=id).first()
 	form = PatientForm(instance=patient)
 	form2 = UserForm(instance=patient.user)
-	return render(request, 'profile_edit.html' ,{'patient' : patient, 'form' : form, 'form2' : form2})
-
+	if request.method == "POST":
+		print(request.POST)
+		form = PatientForm(request.POST, instance=patient)
+		form2 = UserForm(request.POST, instance=patient.user)
+		if form.is_valid() and form2.is_valid():
+			form.save()
+			form2.save()
+	return render(request, 'profile_edit.html', {'patient' : patient, 'form' : form, 'form2' : form2} )
 
 	# def complete_patient_profile(request):
 	# if request.method == 'POST':
