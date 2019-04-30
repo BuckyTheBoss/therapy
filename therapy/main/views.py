@@ -48,7 +48,7 @@ def signup(request):
 			user.is_patient=True
 			user.save()
 			'''hashing process here to give link'''
-			send_mail('Congratulations on signing up to theratinder', 'Click the confirmation in order to login to your profile {}'.format('login'),'theratinder@gmail.com',[user.email],fail_silently=False)
+			send_mail('Congratulations on signing up to theratinder', 'Congrats on the signup!','theratinder@gmail.com',[user.email],fail_silently=False)
 			return redirect('index') #should redirect to dead end page until user confirms email
 	form = CustomUserCreationForm()
 	return render(request, 'registration/signup.html', {'form' : form})
@@ -59,6 +59,9 @@ def patient_matched_index(request):
 	
 	return render(request, 'patient_matched_index.html')
 
+def front(request):
+	'''this will have the initial chat space'''
+	return render(request, 'front.html')
 
 def patient_chat(request, therapist_id):
 	chat = Chat.objects.filter(therapist__id=therapist_id).filter(patient__id=request.user.patient.id).first()
