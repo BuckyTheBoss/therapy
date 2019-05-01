@@ -13,7 +13,9 @@
 {% for therapist in therapists %}
   <div class='mt-1'>
 
-  <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
+  <a href="{% url 'doctor_profile' therapist.id%}" class="list-group-item list-group-item-action flex-column align-items-start active">
+
+    <h1>{{ therapist.user.first_name }} {{ therapist.user.last_name }}</h1>
 
     <div class="d-flex w-100 justify-content-between">
       <h5 class="mb-1">{{ therapist.adress }}</h5>
@@ -22,15 +24,7 @@
     <p class="mb-1">{{ therapist.bio }}</p>
 
   <div>
-  <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">List group item heading</h5>
-      <small>3 days ago</small>
-    </div>
-    <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
 
-    <small>Donec id elit non mi porta.</small>
-  </a>
 </div>
 
   {% endfor %}
