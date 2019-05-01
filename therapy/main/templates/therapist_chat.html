@@ -3,7 +3,7 @@
 {% block content %}
 	<!-- display chat messages -->
 	{% for message in chat.message_set.all %}
-		{% if request.user.profile == message.profile %}
+		{% if request.user.therapist == message.therapist %}
 			<div class="card">
 				<div class="card-body">
 					<h6>You<cite class="grey-text darken-1">~{{message.timestamp | timesince}} ago</cite>
@@ -17,11 +17,7 @@
 					<h6 class="card-title">
 					<a class='dropdown-trigger ' href='#' data-target='dropdown1'>{{message.user.username}}</a> <cite class="grey-text darken-1">~{{message.timestamp | timesince}} ago</cite>
 					</h6>
-					<ul id='dropdown1' class='dropdown-content'>
-						<li><a href="#!">Message</a></li>
-						<li><a href="#!">View Profile</a></li>
-						
-					</ul>
+					
 					<p class="card-text">{{message.content}}</p>
 				</div>
 			</div>
