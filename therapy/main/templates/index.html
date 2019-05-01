@@ -4,10 +4,6 @@
 
 
 
-<img src='thera-tinder.png'>
-
-
-
 <div class="list-group">
 
 {% for therapist in therapists %}
@@ -15,7 +11,7 @@
 
   <a href="{% url 'doctor_profile' therapist.id%}" class="list-group-item list-group-item-action flex-column align-items-start active">
 
-    <h1>{{ therapist.user.first_name }} {{ therapist.user.last_name }}</h1>
+    <h1>{{ therapist.user.first_name }} {{ therapist.user.last_name }}</h1></a>
 
     <div class="d-flex w-100 justify-content-between">
       <h5 class="mb-1">{{ therapist.adress }}</h5>
@@ -28,8 +24,6 @@
 </div>
 
   {% endfor %}
-
-
 
 </div>
 
