@@ -11,22 +11,22 @@
 <div class="list-group">
 
 {% for therapist in therapists %}
-  <div class='mt-1'>
-
-  <a href="{% url 'doctor_profile' therapist.id%}" class="list-group-item list-group-item-action flex-column align-items-start active">
-
-    <h1>{{ therapist.user.first_name }} {{ therapist.user.last_name }}</h1>
-
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">{{ therapist.adress }}</h5>
-      <img src="https://www.computerhope.com/cdn/computer-hope.jpg" width="40" height="40" alt="therapist">
-    </div>
-    <p class="mb-1">{{ therapist.bio }}</p>
-
-  <div>
-
+<div class="card list-group-item1 mt-3">
+  <div class="card-header">
+    <img src="https://www.computerhope.com/cdn/computer-hope.jpg" width="40" height="40" alt="therapist">
+    {{ therapist.user.first_name }} {{ therapist.user.last_name }}
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Special title treatment</h5>
+    <p class="card-text">{{ therapist.bio }}</p>
+    <a href="{% url 'doctor_profile' therapist.id%}" class="btn btn-success">Read More</a>
+  </div>
 </div>
 
+
+
+
+  
   {% endfor %}
 
 
