@@ -60,7 +60,6 @@ def patient_matched_index(request):
 	return render(request, 'patient_matched_index.html')
 
 def front(request):
-	'''this will have the initial chat space'''
 	return render(request, 'front.html')
 
 def patient_chat(request, therapist_id):
@@ -74,11 +73,18 @@ def patient_chat(request, therapist_id):
 	return render(request, 'chat.html', {'chat' : chat})
 
 
+
+
 # def therapist_chat(request, chat_id)
 # 	chat = Chat.objects.filter(pk=chat_id)
 # 	if chat.therapist != request.user.therapist:
 # 		#flash message "not your caht to see"
 # 		return redirect('index')
+
+
+def about(request):
+	return render(request, 'about.html')
+
 
 
 
