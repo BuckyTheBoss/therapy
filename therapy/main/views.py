@@ -41,7 +41,8 @@ def doctor_index(request):
 	return render(request, 'doctor_index.html')
 
 def index(request):
-	therapists = Therapist.objects.all()
+	therapists = Therapist.objects.filter(categories__in=request.user.patient.categories.all()).all()
+	print(therapists)
 	'''queeris here button to redrect to 
 	patient_matched_index when you have started an interaction with acouncilor
 	 after a chat this will show up in the navbar if logged in and have assined councilor'''
