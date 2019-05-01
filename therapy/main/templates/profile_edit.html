@@ -3,11 +3,11 @@
 
 {% block content %}
 
-<<<<<<< HEAD
-<h3>Edit your profile</h3>
-=======
+
+
+
 <h1> Edit your profile </h1>
->>>>>>> 035ebb74199299f2b3d3757012e2f96700a954f0
+
 
 <!-- {% if user.patient.patient_profile_incomplete == True %} 
 	<form method="post">
@@ -19,17 +19,14 @@
 
 <form method="post">
 	{% csrf_token %}
-<<<<<<< HEAD
+
 	{{ form2 | crispy }}
 	{{ form | crispy }}
-	<button type="submit">Save</button>
-=======
-	{{ form2 | crispy}}
-	{{form | crispy}}
+
 
 	<button class="btn btn-primary" type="submit">Save Changes</button>
 
->>>>>>> 035ebb74199299f2b3d3757012e2f96700a954f0
+
 	
 </form>
 
