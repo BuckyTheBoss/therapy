@@ -71,12 +71,20 @@ def patient_chat(request, therapist_id):
 	return render(request, 'chat.html', {'chat' : chat})
 
 
-# def therapist_chat(request, chat_id)
-# 	chat = Chat.objects.filter(pk=chat_id)
-# 	if chat.therapist != request.user.therapist:
-# 		#flash message "not your caht to see"
-# 		return redirect('index')
+def therapist_chat(request, chat_id):
+	chat = Chat.objects.filter(pk=chat_id).first()
+	if chat.therapist != request.user.therapist:
+		#flash message "not your caht to see"
+		return redirect('index')
+
+	if request.method == 'POST':
+		message = Message(chat=chat, content=request.POST.get('content'), user=request.user)
+		message.save()
+	return render(request, 'therapist_chat.html', {'chat' : chat})
 
 
+def all_therapist_chats(request, therapist_id):
+	chats = Chat.objects.filter(therapist__id=therapist_id).all()
+	return render(request, 'doc_chats.html', {'chats' : chats})
 
 
