@@ -21,7 +21,12 @@ urlpatterns = [
     path('front', views.front, name='front'),
 
     path('chat/<int:therapist_id>', views.patient_chat, name='chatroom'),
+<<<<<<< HEAD
+    path('therapist/chats/<int:therapist_id>', views.all_therapist_chats , name='all_doc_chats'),
+    path('therapist/chat/<int:chat_id>', views.therapist_chat, name='doc_chat'),
+=======
 
+>>>>>>> master
 ]
 
 
