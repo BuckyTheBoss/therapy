@@ -15,8 +15,10 @@ class LoginRequiredMiddleware:
         return self.get_response(request)
 
     def process_view(self, request, view_func, view_args, view_kwargs):
-        if view_func.view_class == auth_views.LoginView or view_func.view_class == auth_views.LogoutView:
-            return
+        view_attr_list = [a for a in dir(view_func) if not a.startswith('__')]
+        if 'view_class' in view_attr_list:
+            if view_func.view_class == auth_views.LoginView or view_func.view_class == auth_views.LogoutView:
+                return
 
         if getattr(view_func, 'login_exempt', False):
             return
