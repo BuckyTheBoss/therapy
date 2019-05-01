@@ -31,10 +31,10 @@ def profile_edit(request,id):
 def doctor_profile_edit(request):
 	return render(request, 'doctor_profile_edit.html')
 
-def doctor_profile(request):
-	therapists = Therapist.objects.all()
+def doctor_profile(request,id):
+	therapist = Therapist.objects.filter(id=id).first()
 	'''this will have the initial chat space display this as a card'''
-	return render(request, 'doctor_profile.html', {'therapists' : therapists})
+	return render(request, 'doctor_profile.html', {'therapist' : therapist})
 
 def doctor_index(request):
 	'''this will have the initial chat space'''
