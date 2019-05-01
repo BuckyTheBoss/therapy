@@ -51,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'therapy.middleware.login_exempt.LoginRequiredMiddleware'
 ]
 
 ROOT_URLCONF = 'therapy.urls'

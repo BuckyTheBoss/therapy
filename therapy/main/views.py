@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.core.mail import send_mail
-
+from therapy.middleware.login_exempt import login_exempt
 from .models import Therapist, Patient
 from .forms import *
 
 
 def profile_edit(request,id):
+	if not request.user.is_patient:
+		return redirect('doctor_profile_edit')
 	patient = Patient.objects.filter(id=id).first()
 	form = PatientForm(instance=patient)
 	form2 = UserForm(instance=patient.user)
@@ -41,10 +43,12 @@ def doctor_index(request):
 	return render(request, 'doctor_index.html')
 
 def index(request):
+	if not request.user.is_patient:
+		return redirect('doctor_index')
 	therapists = Therapist.objects.filter(categories__in=request.user.patient.categories.all()).all()
 	return render(request, 'index.html',{'therapists' : therapists})
 
-
+@login_exempt
 def signup(request):
 	if request.method == 'POST':
 		form = CustomUserCreationForm(request.POST)
@@ -63,7 +67,7 @@ def patient_matched_index(request):
 	
 	return render(request, 'patient_matched_index.html')
 
-
+@login_exempt
 def front(request):
 	return render(request, 'front.html')
 
@@ -78,7 +82,7 @@ def patient_chat(request, therapist_id):
 	return render(request, 'chat.html', {'chat' : chat})
 
 
-
+@login_exempt
 def about(request):
 	return render(request, 'about.html')
 
