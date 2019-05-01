@@ -1,23 +1,32 @@
-from django.shortcuts import render
-
-from .models import Therapist , Patient
-
-
-from .models import Therapist
-
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
-from django.views.generic import CreateView
-from .forms import *
 from django.core.mail import send_mail
 
+from .models import Therapist, Patient
+from .forms import *
 
-# Create your views here.
+
 def profile_edit(request,id):
 	patient = Patient.objects.filter(id=id).first()
 	form = PatientForm(instance=patient)
 	form2 = UserForm(instance=patient.user)
-	return render(request, 'profile_edit.html' ,{'patient' : patient, 'form' : form, 'form2' : form2})
+	if request.method == "POST":
+		print(request.POST)
+		form = PatientForm(request.POST, instance=patient)
+		form2 = UserForm(request.POST, instance=patient.user)
+		if form.is_valid() and form2.is_valid():
+			form.save()
+			form2.save()
+	return render(request, 'profile_edit.html', {'patient' : patient, 'form' : form, 'form2' : form2} )
+
+	# def complete_patient_profile(request):
+	# if request.method == 'POST':
+	# 	form = PatientForm(request.POST)
+	# 	if form.is_valid():
+	# 		patient.save()
+
+	# form = PatientForm()
+	# return render(request, 'profile_edit.html', {'form' : form})
 
 def doctor_profile_edit(request):
 	return render(request, 'doctor_profile_edit.html')
@@ -48,17 +57,21 @@ def signup(request):
 			user.is_patient=True
 			user.save()
 			'''hashing process here to give link'''
-			send_mail('Congratulations on signing up to theratinder', 'Click the confirmation in order to login to your profile {}'.format('login'),'theratinder@gmail.com',[user.email],fail_silently=False)
+			send_mail('Congratulations on signing up to theratinder', 'Congrats on the signup!','theratinder@gmail.com',[user.email],fail_silently=False)
 			return redirect('index') #should redirect to dead end page until user confirms email
 	form = CustomUserCreationForm()
 	return render(request, 'registration/signup.html', {'form' : form})
 
 
-
 def patient_matched_index(request):
 	
 	return render(request, 'patient_matched_index.html')
+<<<<<<< HEAD
+=======
 
+def front(request):
+	'''this will have the initial chat space'''
+	return render(request, 'front.html')
 
 def patient_chat(request, therapist_id):
 	chat = Chat.objects.filter(therapist__id=therapist_id).filter(patient__id=request.user.patient.id).first()
@@ -88,3 +101,4 @@ def all_therapist_chats(request, therapist_id):
 	return render(request, 'doc_chats.html', {'chats' : chats})
 
 
+>>>>>>> 035ebb74199299f2b3d3757012e2f96700a954f0

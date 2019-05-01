@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+
+
+<br>
+<br>
+
+<img src="{% static 'images/thera-tinder.png'%}" width="200" height="140" alt="My Pic">
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+<div class="row">
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Sign up</h5>
+        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+        <a href="{% url 'patient_signup' %}" class="btn btn-primary">let's go</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Login</h5>
+        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+        <a href="{% url 'login' %}" class="btn btn-primary">login</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
