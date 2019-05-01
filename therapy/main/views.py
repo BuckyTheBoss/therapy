@@ -66,11 +66,9 @@ def signup(request):
 def patient_matched_index(request):
 	
 	return render(request, 'patient_matched_index.html')
-<<<<<<< HEAD
-=======
+
 
 def front(request):
-	'''this will have the initial chat space'''
 	return render(request, 'front.html')
 
 def patient_chat(request, therapist_id):
@@ -82,6 +80,13 @@ def patient_chat(request, therapist_id):
 		message = Message(chat=chat, content=request.POST.get('content'), user=request.user)
 		message.save()
 	return render(request, 'chat.html', {'chat' : chat})
+
+
+
+def about(request):
+	return render(request, 'about.html')
+
+
 
 
 def therapist_chat(request, chat_id):
@@ -101,4 +106,5 @@ def all_therapist_chats(request, therapist_id):
 	return render(request, 'doc_chats.html', {'chats' : chats})
 
 
->>>>>>> 035ebb74199299f2b3d3757012e2f96700a954f0
+
+
