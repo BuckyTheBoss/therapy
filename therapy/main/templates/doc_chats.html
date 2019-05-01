@@ -3,7 +3,7 @@
 
 	<ul class="list-group">
 {% for chat in chats %}
-		<a href="{% url 'doc_chat' chat.id %}" class="btn btn-outline-dark"></a>
+		<a href="{% url 'doc_chat' chat.id %}" class="btn btn-outline-dark">Chat with: {{chat.patient.user.first_name}} {{chat.patient.user.last_name}}</a>
 
 {% endfor %}
 	</ul>
