@@ -76,7 +76,8 @@ def front(request):
 
 def patient_chat(request, therapist_id):
 	therapist = Therapist.objects.filter(pk=therapist_id).first()
-	chat = Chat.objects.filter(therapist__id=therapist_id).filter(patient__id=request.user.patient.id).first()
+	chat = Chat.objects.filter(therapist__id=therapist_id).filter(
+		patient__user=request.user).first()
 	unread_msg_ids = []
 	unread_messages = Message.objects.filter(chat=chat,read=False, user=therapist.user)
 	for message in unread_messages:
