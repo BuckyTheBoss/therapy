@@ -70,6 +70,8 @@ def patient_matched_index(request):
 
 @login_exempt
 def front(request):
+	if request.user.is_authenticated:
+		return redirect('index')
 	return render(request, 'front.html')
 
 def patient_chat(request, therapist_id):

@@ -5,7 +5,7 @@
 
 
 <div class="list-group">
-
+{% if therapists %}
 {% for therapist in therapists %}
 
   <div class='mt-1'>
@@ -32,7 +32,9 @@
 
   
   {% endfor %}
-
+{% else %}
+<h1>we couldnt find you any matching therapists, please update your settings on your profile page.</h1>
+{% endif %}
 </div>
 
 
