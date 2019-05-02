@@ -3,10 +3,10 @@
 {% block content %}
 	<!-- display chat messages -->
 	{% for message in chat.message_set.all %}
-		{% if request.user.therapist == message.therapist %}
+		{% if request.user == message.user %}
 			<div class="card">
 				<div class="card-body">
-					<h6>You<cite class="grey-text darken-1">~{{message.timestamp | timesince}} ago</cite>
+					<h6>You <cite class="grey-text darken-1">~{{message.timestamp | timesince}} ago</cite>
 					</h6>
 					<p>{{message.content}}</p>
 				</div>

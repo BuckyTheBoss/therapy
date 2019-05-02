@@ -1,19 +1,25 @@
 {% extends 'base.html' %}
-
-{% block content %}
-
-<h1>Patients</h1>
-
-<div class="card" style="width: 18rem;">
-  <img class="card-img-top" src="..." alt="Card image cap">
-  <div class="card-body">
-    <h5 class="card-title">{{ therapist. }}</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
-  </div>
+{% block content2 %}
+<div class="row">
+	<div class="col-2">
+		<img src="">
+		<ul class="list-group">
+			<li class="list-group-item mt-3">{{request.user.first_name}} {{request.user.last_name}}</li>
+			<li class="list-group-item mt-3">Total Patients: {number}</li>
+			<li class="list-group-item mt-3">Joined TheraTinder: {{request.user.date_joined}}</li>
+			<li class="list-group-item mt-3">Appointments this week: {number}</li>
+		</ul>
+	</div>
+	<div class="col-5">
+		<h1>Chats</h1>
+		<ul>
+			{% for chat in chats %}
+				<a href="{% url 'doc_chat' chat.id %}" class="btn list-group-item"> {{chat.patient.user.first_name}} {{chat.patient.user.last_name}} <span class="badge badge-light">{{chat.get_unread_count_therapist}}</span></a>
+			{% endfor %}
+		</ul>
+	</div>
+	<div class="col-5">
+		<h1>Appointments</h1>
+	</div>
 </div>
-
-
-
 {% endblock %}
-

@@ -62,8 +62,8 @@ class TherapySession(models.Model):
 
 
 class SessionLog(models.Model):
-	therapist_notes = models.TextField()
-	patient_notes = models.TextField()
+	therapist_notes = models.TextField(null=True)
+	patient_notes = models.TextField(null=True)
 	therapysession = models.ForeignKey(TherapySession, on_delete=models.SET_NULL, null=True)
 
 
@@ -84,9 +84,15 @@ class Chat(models.Model):
 	patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
 	therapist = models.ForeignKey(Therapist, on_delete=models.CASCADE)
 
+	def get_unread_count_patient(self):
+		return Message.objects.filter(chat=self, read=False, user=self.therapist.user).count()
+	
+	def get_unread_count_therapist(self):
+		return Message.objects.filter(chat=self, read=False, user=self.patient.user).count()
 
 class Message(models.Model):
 	content = models.TextField()
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
 	timestamp = models.DateTimeField(default=timezone.now)
+	read = models.BooleanField(default=False)
