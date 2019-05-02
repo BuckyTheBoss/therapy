@@ -58,7 +58,7 @@ class Match(models.Model):
 class TherapySession(models.Model):
 	match = models.ForeignKey(Match, on_delete=models.CASCADE)
 	datetime = models.DateTimeField()
-	occured = models.BooleanField()
+	occured = models.BooleanField(null=True)
 
 
 class SessionLog(models.Model):

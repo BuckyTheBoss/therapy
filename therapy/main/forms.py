@@ -1,9 +1,13 @@
+import datetime
+
 from django import forms
 from django.contrib.auth.models import AbstractUser
-# from django.forms import ModelForm
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
+
+from tempus_dominus.widgets import DatePicker, TimePicker, DateTimePicker
+
 from .models import *
 
 
@@ -11,7 +15,6 @@ class UserForm(forms.ModelForm):
 	class Meta:
 		model = User
 		fields = ('first_name', 'last_name', 'email')
-
 
 # class PatientForm(ModelForm):
 # 	class Meta:
@@ -55,13 +58,52 @@ class CustomUserCreationForm(UserCreationForm):
 		fields = ('username', 'email')
 
 
-# class ArticleForm(ModelForm):
-#     headline = MyFormField(
-#         max_length=200,
-#         required=False,
-#         help_text='Use puns liberally',
-#     )
+class AppoinmentForm(forms.Form):
+    # date_field = forms.DateField(widget=DatePicker())
+    # Available_dates = forms.DateField(
+    #     required=True,
+    #     widget=DatePicker(
+    #         options=
+    #         {
+    #         'daysOfWeekDisabled': [1,4],
+    #         }, 'sideBySide'=True,
+    #         # options={
+    #         #     'minDate': 'today',
+    #         #     'maxDate': '2020-01-01',
+    #         # },
+            
+    #     ),
+    # )
+    # Select_a_time = forms.TimeField(
+    #     widget=TimePicker(
+    #         options={
+    #             'enabledHours': [9, 10, 11, 12, 13, 14, 15, 16],
+    #         },
+    #         attrs={
+    #             'input_toggle': True,
+    #             'input_group': True,
+    #         },
+       
+    #     ),
+    # )
+    Select_an_available_session = forms.DateTimeField(
+        widget=DateTimePicker(
+            options={
+                'minDate': (
+                    datetime.date.today() + datetime.timedelta(days=1)
+                ).strftime(
+                    '%Y-%m-%d'
+                ),  # Tomorrow
+                'useCurrent': True,
+                'collapse': False,
+                'sideBySide': True,
+                'daysOfWeekDisabled': [0,2,4,5,6],
+                'enabledHours': [10, 11, 12],
 
-#     class Meta:
-#         model = Article
-#         fields = ['headline', 'content']
+            },
+            attrs={
+                'append': 'fa fa-calendar',
+                'icon_toggle': True,
+            }
+        ),
+    )

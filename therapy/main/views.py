@@ -41,6 +41,10 @@ def index(request):
 	therapists = Therapist.objects.filter(categories__in=request.user.patient.categories.all()).all()
 	return render(request, 'index.html',{'therapists' : therapists})
 
+def patient_matched_index(request):
+	
+	return render(request, 'patient_matched_index.html')
+
 @login_exempt
 def signup(request):
 	if request.method == 'POST':
@@ -54,11 +58,6 @@ def signup(request):
 			return redirect('index') #should redirect to dead end page until user confirms email
 	form = CustomUserCreationForm()
 	return render(request, 'registration/signup.html', {'form' : form})
-
-
-def patient_matched_index(request):
-	
-	return render(request, 'patient_matched_index.html')
 
 @login_exempt
 def front(request):
@@ -89,8 +88,6 @@ def about(request):
 	return render(request, 'about.html')
 
 
-
-
 def therapist_chat(request, chat_id):
 	chat = Chat.objects.filter(pk=chat_id).first()
 	unread_messages = Message.objects.filter(chat=chat,read=False, user=chat.patient.user)
@@ -110,5 +107,13 @@ def all_therapist_chats(request, therapist_id):
 	return render(request, 'doc_chats.html', {'chats' : chats})
 
 
-
-
+def book_session(request, therapist_id):
+	if request.method == 'POST':
+		form = AppoinmentForm(request.POST)
+		if form.is_valid():
+			user = form.save(commit=False)
+			user.is_patient=True
+			user.save()
+			return redirect('patient_chat') 
+	form = AppoinmentForm()
+	return render(request, 'book_session.html', {'form' : form})
