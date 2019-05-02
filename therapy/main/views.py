@@ -20,15 +20,7 @@ def profile_edit(request,id):
 			form.save()
 			form2.save()
 	return render(request, 'profile_edit.html', {'patient' : patient, 'form' : form, 'form2' : form2} )
-
-	# def complete_patient_profile(request):
-	# if request.method == 'POST':
-	# 	form = PatientForm(request.POST)
-	# 	if form.is_valid():
-	# 		patient.save()
-
-	# form = PatientForm()
-	# return render(request, 'profile_edit.html', {'form' : form})
+	
 
 def doctor_profile_edit(request):
 	return render(request, 'doctor_profile_edit.html')
