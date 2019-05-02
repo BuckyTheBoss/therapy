@@ -60,7 +60,6 @@ class TherapySession(models.Model):
 	datetime = models.DateTimeField()
 	occured = models.BooleanField()
 
-
 class SessionLog(models.Model):
 	therapist_notes = models.TextField(null=True)
 	patient_notes = models.TextField(null=True)

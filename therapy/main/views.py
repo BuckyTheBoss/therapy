@@ -89,7 +89,8 @@ def patient_chat(request, therapist_id):
 	if request.method == 'POST':
 		message = Message(chat=chat, content=request.POST.get('content'), user=request.user)
 		message.save()
-	return render(request, 'chat.html', {'chat' : chat, 'unread_msg_ids' : unread_msg_ids})
+	messages = Message.objects.filter(chat=chat).count()
+	return render(request, 'chat.html', {'chat' : chat, 'unread_msg_ids' : unread_msg_ids, 'messages' : messages})
 
 
 @login_exempt
@@ -117,6 +118,10 @@ def all_therapist_chats(request, therapist_id):
 	chats = Chat.objects.filter(therapist__id=therapist_id).all()
 	return render(request, 'doc_chats.html', {'chats' : chats})
 
+
+def all_patient_chats(request, patient_id):
+	chats = Chat.objects.filter(patient__id=patient_id).all()
+	return render(request, 'doc_chats.html', {'chats' : chats})
 
 
 
