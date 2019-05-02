@@ -40,7 +40,8 @@ def doctor_profile(request,id):
 
 def doctor_index(request):
 	'''this will have the initial chat space'''
-	return render(request, 'doctor_index.html')
+	chats = Chat.objects.filter(therapist=request.user.therapist)
+	return render(request, 'doctor_index.html', {'chats' : chats})
 
 def index(request):
 	if not request.user.is_patient:
@@ -72,14 +73,21 @@ def front(request):
 	return render(request, 'front.html')
 
 def patient_chat(request, therapist_id):
+	therapist = Therapist.objects.filter(pk=therapist_id).first()
 	chat = Chat.objects.filter(therapist__id=therapist_id).filter(patient__id=request.user.patient.id).first()
+	unread_msg_ids = []
+	unread_messages = Message.objects.filter(chat=chat,read=False, user=therapist.user)
+	for message in unread_messages:
+		unread_msg_ids.append(message.id)	
+	unread_messages.update(read=True)
+
 	if request.user.is_patient and chat == None:
 		chat = Chat(therapist=Therapist.objects.get(pk=therapist_id), patient=request.user.patient)
 		chat.save()
 	if request.method == 'POST':
 		message = Message(chat=chat, content=request.POST.get('content'), user=request.user)
 		message.save()
-	return render(request, 'chat.html', {'chat' : chat})
+	return render(request, 'chat.html', {'chat' : chat, 'unread_msg_ids' : unread_msg_ids})
 
 
 @login_exempt
@@ -91,13 +99,15 @@ def about(request):
 
 def therapist_chat(request, chat_id):
 	chat = Chat.objects.filter(pk=chat_id).first()
+	unread_messages = Message.objects.filter(chat=chat,read=False, user=chat.patient.user)
 	if chat.therapist != request.user.therapist:
-		#flash message "not your caht to see"
+		#flash message "not your chat to see"
 		return redirect('index')
 
 	if request.method == 'POST':
 		message = Message(chat=chat, content=request.POST.get('content'), user=request.user)
 		message.save()
+	unread_messages.update(read=True)
 	return render(request, 'therapist_chat.html', {'chat' : chat})
 
 
