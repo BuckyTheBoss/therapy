@@ -10,9 +10,11 @@
     <h5 class="card-title">{{ therapist.user.first_name }} {{ therapist.user.last_name }}</h5>
     <p class="card-text">{{ therapist.bio }}</p>
     <a href="{% url 'chatroom' therapist.id %}" class="btn btn-primary">Start chat</a>
+    <a href="#" class="btn btn-primary">Book Session</a>
   </div>
 </div>
 
 
 
 {% endblock %}
+
