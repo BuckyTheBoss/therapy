@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-
+from django.conf.urls import url
 from . import views
 from django.contrib.auth import views as auth_views
 
@@ -23,6 +23,8 @@ urlpatterns = [
     path('therapist/chats/<int:therapist_id>', views.all_therapist_chats , name='all_doc_chats'),
     path('therapist/chat/<int:chat_id>', views.therapist_chat, name='doc_chat'),
     path('patient/<int:patient_id>/chats', views.all_patient_chats , name='all_patient_chats'),
+    url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        views.activate, name='activate'),
 ]
 
 
