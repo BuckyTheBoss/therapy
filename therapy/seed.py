@@ -61,7 +61,7 @@ def create_patient_users(number):
 
 def seed_patient_profile():
 	for profile in Patient.objects.all():
-		profile.category.add(pick_category())
+		profile.categories.add(pick_category())
 		profile.bio = gen_sentance()
 		profile.birthdate = gen_birthdate()
 		profile.gender = random.choice(['M','F']) 
@@ -111,6 +111,6 @@ if Therapist.objects.all().count() == 0:
 	seed_therapist()
 
 
-if Patient.objects.all().count() == 0:
-	create_patient_users(10)
-	seed_patient_profile()
+# if Patient.objects.all().count() == 0:
+# 	create_patient_users(10)
+# 	seed_patient_profile()

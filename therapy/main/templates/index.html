@@ -10,14 +10,12 @@
 
   <div class='mt-1'>
 
-  <a href="{% url 'doctor_profile' therapist.id%}" class="list-group-item list-group-item-action flex-column align-items-start active">
-
-    <h1>{{ therapist.user.first_name }} {{ therapist.user.last_name }}</h1></a>
+  
 
 <div class="card list-group-item1 mt-3">
   <div class="card-header">
     <img src="https://www.computerhope.com/cdn/computer-hope.jpg" width="40" height="40" alt="therapist">
-    {{ therapist.user.first_name }} {{ therapist.user.last_name }}
+    <a href="{% url 'doctor_profile' therapist.id%}" class="list-group-item list-group-item-action flex-column align-items-start active">{{ therapist.user.first_name }} {{ therapist.user.last_name }}</a>
   </div>
   <div class="card-body">
     <h5 class="card-title">Special title treatment</h5>

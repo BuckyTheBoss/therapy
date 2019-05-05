@@ -23,7 +23,7 @@ class Therapist(models.Model):
 	languages = models.CharField(max_length=30, null=True)
 	categories = models.ManyToManyField(Category)
 	gender = models.CharField(max_length=30, null=True)
-	birthdate = models.DateTimeField(null=True)
+	birthdate = models.DateField(null=True)
 	bio = models.TextField(null=True)
 
 
@@ -31,7 +31,7 @@ class Patient(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	categories = models.ManyToManyField(Category)
 	gender = models.CharField(max_length=30, null=True)
-	birthdate = models.DateTimeField(null=True)
+	birthdate = models.DateField(null=True)
 	bio = models.TextField(null=True)
 
 
