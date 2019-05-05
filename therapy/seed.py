@@ -78,7 +78,7 @@ def seed_therapist():
 	for profile in Therapist.objects.all():
 		category1 = pick_category()
 		category2 = pick_category(category1)
-		profile.category.add(category1, category2)
+		profile.categories.add(category1, category2)
 		profile.bio = gen_paragraph()
 		profile.birthdate = gen_birthdate()
 		profile.gender = random.choice(['M','F']) 
