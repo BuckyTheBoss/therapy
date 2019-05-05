@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+	
+	<!-- <form method="POST" class="form-inline">
+		{% csrf_token %}
+		<div class="form-group mx-sm-3 mb-2">
+			<label for="content" class="sr-only">Message</label>
+			<input name="content" class="form-control" id="content" placeholder="Start typing...">
+		</div>
+		<button type="submit" class="btn btn-primary mb-2">Send</button>
+	</form> -->
+    <script type="text/javascript">
+            $(function () {
+                $('#datetimepicker4').datetimepicker({
+                    format: 'L'
+                });
+            });
+    </script>
+
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <form method="post">
+            {% csrf_token %}
+            {{ form }}
+              <input type="submit" value="Save">
+          </form>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}

@@ -40,9 +40,9 @@ def gen_datetime(datetime=None):
 def gen_birthdate():
 	return fake.date_this_century(before_today=True, after_today=False)
 
-def pick_category(category=None):
-	if category != None:
-		return random.choice(Category.objects.exclude(name=category.name).all())
+def pick_category(categories=None):
+	if categories != None:
+		return random.choice(Category.objects.exclude(name=categories.name).all())
 	return random.choice(Category.objects.all())
 
 def create_patient_users(number):

@@ -1,10 +1,13 @@
+import datetime 
+
 from django.db import models
 from django.forms import ModelForm
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-# Create your models here.
+
+from tempus_dominus.widgets import DatePicker, TimePicker, DateTimePicker
 
 class User(AbstractUser):
 	is_patient = models.BooleanField(default=True)
@@ -58,13 +61,40 @@ class Match(models.Model):
 class TherapySession(models.Model):
 	match = models.ForeignKey(Match, on_delete=models.CASCADE)
 	datetime = models.DateTimeField()
-	occured = models.BooleanField()
+	occured = models.BooleanField(null=True)
+
+
+class TestSession(models.Model):
+	session_time = models.DateTimeField()
+	
+	def __str__(self):
+		return f"{self.session_time}"
+	# session_time = models.DateTimeField(
+	# 	DateTimePicker(
+	# 		options={
+	# 			'minDate': (
+	# 				d2atetime.date.today() + datetime.timedelta(days=1)
+	# 			).strftime(
+	# 				'%Y-%m-%d'
+	# 			),  # Tomorrow
+	# 			'useCurrent': True,
+	# 			'collapse': False,
+	# 			'sideBySide': True,
+	# 			'daysOfWeekDisabled': [0,2,4,5,6],
+	# 			'enabledHours': [10, 11, 12],
+
+	# 		},
+	# 		attrs={
+	# 			'append': 'fa fa-calendar',
+	# 			'icon_toggle': True,
+	# 		}
+	# 	),
+	# )
 
 class SessionLog(models.Model):
 	therapist_notes = models.TextField(null=True)
 	patient_notes = models.TextField(null=True)
 	therapysession = models.ForeignKey(TherapySession, on_delete=models.SET_NULL, null=True)
-
 
 class Questionnaire(models.Model):
 	q1 = models.TextField()

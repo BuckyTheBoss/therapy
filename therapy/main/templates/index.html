@@ -3,13 +3,14 @@
 {% block content %}
 
 
-
 <div class="list-group">
-{% if therapists %}
-{% for therapist in therapists %}
 
-  <div class='mt-1'>
+<<<<<<< HEAD
 
+{% if therapist %}
+
+  {% for therapist in therapists %}
+=======
   
 
 <div class="card list-group-item1 mt-3">
@@ -23,17 +24,33 @@
     <a href="{% url 'doctor_profile' therapist.id%}" class="btn btn-success">Read More</a>
   </div>
 </div>
+>>>>>>> 67d378ae68c8af1ffb637fbc2858ed9b2f9d6f4c
 
+    <div class='mt-1'>
 
+    <a href="{% url 'doctor_profile' therapist.id%}" class="list-group-item list-group-item-action flex-column align-items-start active">
 
+      <h1>{{ therapist.user.first_name }} {{ therapist.user.last_name }}</h1></a>
 
+    <div class="card list-group-item1 mt-3">
+      <div class="card-header">
+        <img src="https://www.computerhope.com/cdn/computer-hope.jpg" width="40" height="40" alt="therapist">
+        {{ therapist.user.first_name }} {{ therapist.user.last_name }}
+      </div>
+    <div class="card-body">
+      <h5 class="card-title">Special title treatment</h5>
+      <p class="card-text">{{ therapist.bio }}</p>
+      <a href="{% url 'doctor_profile' therapist.id%}" class="btn btn-success">Read More</a>
+    </div>
+  </div>
 
-  
   {% endfor %}
+
+
 {% else %}
 <h1>we couldnt find you any matching therapists, please update your settings on your profile page.</h1>
 {% endif %}
-</div>
 
+</div>
 
 {% endblock %}
