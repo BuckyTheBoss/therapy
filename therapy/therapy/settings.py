@@ -25,7 +25,12 @@ SECRET_KEY = 'pu3s8jep0)z-u69jzp_b$xh((qp#tk1qk4isdi55vea8-_x)-s'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+<<<<<<< HEAD
 ALLOWED_HOSTS = ['buckytheboss.pythonanywhere.com', '127.0.0.1']
+=======
+ALLOWED_HOSTS = ['buckytheboss.pythonanywhere.com']
+
+>>>>>>> 67d378ae68c8af1ffb637fbc2858ed9b2f9d6f4c
 
 # Application definition
 

@@ -4,7 +4,7 @@
 	<!-- display chat messages -->
 	<div class="container">
 		{% if messages > 10 %}
-		<a class="btn btn-primary" href="#">Book an appointment</a>
+			<a class="btn btn-primary" href="#">Book an appointment</a>
 		{% endif %}
 		<div class="row">
 			{% for message in chat.message_set.all %}
@@ -35,12 +35,14 @@
 		<div class="row">
 			<form method="POST">
 				{% csrf_token %}
-				<div class="input-group mb-3">
-					<input type="text" name="content" class="form-control" placeholder="Start typing..." aria-label="Recipient's username" aria-describedby="button-addon2">
-					<div class="input-group-append">
-						<button class="btn btn-outline-secondary" type="Submit" id="button-addon2">Send</button>
-					</div>
+				
+				<div class="col-8 input-group mb-3">
+					<input type="text-dark" name="content" class="form-control" placeholder="Start typing..." aria-label="Recipient's username" aria-describedby="button-addon2">
 				</div>
+				<div class="col-4 input-group-append">
+					<button class="btn-dark btn-outline-secondary" type="Submit" id="button-addon2">Send</button>
+				</div>
+				
 			</form>
 		</div>
 	</div>

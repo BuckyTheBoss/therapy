@@ -61,7 +61,7 @@ def create_patient_users(number):
 
 def seed_patient_profile():
 	for profile in Patient.objects.all():
-		profile.category.add(pick_category())
+		profile.categories.add(pick_category())
 		profile.bio = gen_sentance()
 		profile.birthdate = gen_birthdate()
 		profile.gender = random.choice(['M','F']) 
