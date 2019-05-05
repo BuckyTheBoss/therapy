@@ -21,9 +21,10 @@
     <div class="container">
       <div class="row">
         <div class="col">
-          <form method="post" action=".">
+          <form method="post">
             {% csrf_token %}
             {{ form }}
+              <input type="submit" value="Save">
           </form>
         </div>
       </div>

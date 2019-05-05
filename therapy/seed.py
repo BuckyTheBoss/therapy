@@ -40,9 +40,9 @@ def gen_datetime(datetime=None):
 def gen_birthdate():
 	return fake.date_this_century(before_today=True, after_today=False)
 
-def pick_category(category=None):
-	if category != None:
-		return random.choice(Category.objects.exclude(name=category.name).all())
+def pick_category(categories=None):
+	if categories != None:
+		return random.choice(Category.objects.exclude(name=categories.name).all())
 	return random.choice(Category.objects.all())
 
 def create_patient_users(number):
@@ -78,7 +78,7 @@ def seed_therapist():
 	for profile in Therapist.objects.all():
 		category1 = pick_category()
 		category2 = pick_category(category1)
-		profile.category.add(category1, category2)
+		profile.categories.add(category1, category2)
 		profile.bio = gen_paragraph()
 		profile.birthdate = gen_birthdate()
 		profile.gender = random.choice(['M','F']) 
@@ -111,6 +111,6 @@ if Therapist.objects.all().count() == 0:
 	seed_therapist()
 
 
-if Patient.objects.all().count() == 0:
-	create_patient_users(10)
-	seed_patient_profile()
+# if Patient.objects.all().count() == 0:
+# 	create_patient_users(10)
+# 	seed_patient_profile()

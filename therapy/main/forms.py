@@ -1,9 +1,13 @@
+import datetime
+
 from django import forms
 from django.contrib.auth.models import AbstractUser
-# from django.forms import ModelForm
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
+
+from tempus_dominus.widgets import DatePicker, TimePicker, DateTimePicker
+
 from .models import *
 
 
@@ -12,15 +16,14 @@ class UserForm(forms.ModelForm):
 		model = User
 		fields = ('first_name', 'last_name', 'email')
 
-
 # class PatientForm(ModelForm):
-# 	class Meta:
-# 		model = Patient
-# 		fields = ('category', 'gender', 'birthdate', 'bio')
+#   class Meta:
+#       model = Patient
+#       fields = ('category', 'gender', 'birthdate', 'bio')
 
-# 	def __init__(self, *args, **kwargs):
-# 		super(PatientForm, self).__init__(*args, **kwargs)
-# 		self.fields['category'].queryset = Category.objects.all()
+#   def __init__(self, *args, **kwargs):
+#       super(PatientForm, self).__init__(*args, **kwargs)
+#       self.fields['category'].queryset = Category.objects.all()
 
 
 class PatientForm(forms.ModelForm):
@@ -29,6 +32,31 @@ class PatientForm(forms.ModelForm):
 		fields = ('categories', 'gender', 'birthdate', 'bio')
 
 		categories = forms.ModelMultipleChoiceField(queryset=Category.objects.all())
+		widgets = {
+			'birthdate' : DatePicker(
+				options={
+				'mixDate': '1900-01-01',
+				'maxDate': '2019-05-01'}, 
+				attrs={
+				'append' : 'fa fa-calendar',
+				'icon_toggle': True},)
+			}
+
+	#         options=
+	#         {
+	#         'daysOfWeekDisabled': [1,4],
+	#         }, 'sideBySide'=True,
+	#         # options={
+	#         #     'minDate': 'today',
+	#         #     'maxDate': '2020-01-01',
+
+		# class AuthorForm(ModelForm):
+  #   	class Meta:
+  #       model = Author
+  #       fields = ('name', 'title', 'birth_date')
+  #       widgets = {
+  #           'name': Textarea(attrs={'cols': 80, 'rows': 20}),
+  #       }
 
 	def __init__(self, *args, **kwargs):
 		if kwargs.get('instance'):
@@ -49,19 +77,82 @@ class TherapistForm(forms.ModelForm):
 		fields = ('address', 'experience', 'education', 'languages', 'categories', 'gender', 'birthdate', 'bio')
 
 
+class TestAppointmentForm(forms.ModelForm):
+	class Meta:
+		model = TestSession
+		fields = ('session_time',)
+		widgets = DateTimePicker(
+			options={
+				'minDate': (
+					datetime.date.today() + datetime.timedelta(days=1)
+				).strftime(
+					'%Y-%m-%d'
+				),  # Tomorrow
+				'useCurrent': True,
+				'collapse': False,
+				'sideBySide': True,
+				'daysOfWeekDisabled': [0,2,4,5,6], 
+				'enabledHours': [10, 11, 12],
+
+			},
+			attrs={
+				'append': 'fa fa-calendar',
+				'icon_toggle': True,
+			}
+		),        
+
 class CustomUserCreationForm(UserCreationForm):
 	class Meta:
 		model = get_user_model()
 		fields = ('username', 'email')
 
 
-# class ArticleForm(ModelForm):
-#     headline = MyFormField(
-#         max_length=200,
-#         required=False,
-#         help_text='Use puns liberally',
-#     )
+class AppoinmentForm(forms.Form):
+	# date_field = forms.DateField(widget=DatePicker())
+	# Available_dates = forms.DateField(
+	#     required=True,
+	#     widget=DatePicker(
+	#         options=
+	#         {
+	#         'daysOfWeekDisabled': [1,4],
+	#         }, 'sideBySide'=True,
+	#         # options={
+	#         #     'minDate': 'today',
+	#         #     'maxDate': '2020-01-01',
+	#         # },
+			
+	#     ),
+	# )
+	# Select_a_time = forms.TimeField(
+	#     widget=TimePicker(
+	#         options={
+	#             'enabledHours': [9, 10, 11, 12, 13, 14, 15, 16],
+	#         },
+	#         attrs={
+	#             'input_toggle': True,
+	#             'input_group': True,
+	#         },
+	   
+	#     ),
+	# )
+	Select_an_available_session = forms.DateTimeField(
+		widget=DateTimePicker(
+			options={
+				'minDate': (
+					datetime.date.today() + datetime.timedelta(days=1)
+				).strftime(
+					'%Y-%m-%d'
+				),  # Tomorrow
+				'useCurrent': True,
+				'collapse': False,
+				'sideBySide': True,
+				'daysOfWeekDisabled': [0,2,4,5,6], 
+				'enabledHours': [10, 11, 12],
 
-#     class Meta:
-#         model = Article
-#         fields = ['headline', 'content']
+			},
+			attrs={
+				'append': 'fa fa-calendar',
+				'icon_toggle': True,
+			}
+		),
+	)

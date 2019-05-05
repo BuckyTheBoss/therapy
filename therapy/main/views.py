@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.core.mail import send_mail
+from django.http import HttpResponse
 from therapy.middleware.login_exempt import login_exempt
-from .models import Therapist, Patient
+
+from .models import *
 from .forms import *
 
 
@@ -13,22 +15,14 @@ def profile_edit(request,id):
 	form = PatientForm(instance=patient)
 	form2 = UserForm(instance=patient.user)
 	if request.method == "POST":
-		print(request.POST)
+		# print(request.POST)
 		form = PatientForm(request.POST, instance=patient)
 		form2 = UserForm(request.POST, instance=patient.user)
 		if form.is_valid() and form2.is_valid():
 			form.save()
 			form2.save()
 	return render(request, 'profile_edit.html', {'patient' : patient, 'form' : form, 'form2' : form2} )
-
-	# def complete_patient_profile(request):
-	# if request.method == 'POST':
-	# 	form = PatientForm(request.POST)
-	# 	if form.is_valid():
-	# 		patient.save()
-
-	# form = PatientForm()
-	# return render(request, 'profile_edit.html', {'form' : form})
+	
 
 def doctor_profile_edit(request):
 	return render(request, 'doctor_profile_edit.html')
@@ -49,6 +43,10 @@ def index(request):
 	therapists = Therapist.objects.filter(categories__in=request.user.patient.categories.all()).all()
 	return render(request, 'index.html',{'therapists' : therapists})
 
+def patient_matched_index(request):
+	
+	return render(request, 'patient_matched_index.html')
+
 @login_exempt
 def signup(request):
 	if request.method == 'POST':
@@ -63,11 +61,6 @@ def signup(request):
 	form = CustomUserCreationForm()
 	return render(request, 'registration/signup.html', {'form' : form})
 
-
-def patient_matched_index(request):
-	
-	return render(request, 'patient_matched_index.html')
-
 @login_exempt
 def front(request):
 	if request.user.is_authenticated:
@@ -76,8 +69,7 @@ def front(request):
 
 def patient_chat(request, therapist_id):
 	therapist = Therapist.objects.filter(pk=therapist_id).first()
-	chat = Chat.objects.filter(therapist__id=therapist_id).filter(
-		patient__user=request.user).first()
+	chat = Chat.objects.filter(therapist__id=therapist_id).filter(patient__id=request.user.patient.id).first()
 	unread_msg_ids = []
 	unread_messages = Message.objects.filter(chat=chat,read=False, user=therapist.user)
 	for message in unread_messages:
@@ -97,8 +89,6 @@ def patient_chat(request, therapist_id):
 @login_exempt
 def about(request):
 	return render(request, 'about.html')
-
-
 
 
 def therapist_chat(request, chat_id):
@@ -124,5 +114,29 @@ def all_patient_chats(request, patient_id):
 	chats = Chat.objects.filter(patient__id=patient_id).all()
 	return render(request, 'doc_chats.html', {'chats' : chats})
 
+# def book_session(request, therapist_id):
+# 	print(request.user)
+# 	therapist = Therapist.objects.filter(pk=therapist_id).first()
+# 	if request.method == 'POST':
+# 		form = AppoinmentForm(request.POST)
+# 		if form.is_valid():
+# 			match = Match.objects.filter(patient=request.user.patient, therapist=therapist).first() 
+# 			if match == None:
+# 				match = Match(patient=request.user.patient, therapist=therapist)
+# 				match.save()
 
+# 			therapy_session = TherapySession(match=match, datetime=request.POST['Select_an_available_session'])
+# 			therapy_session.save()			
+# 			return HttpResponse('<h1>session booked!</h1>')
 
+# 	form = AppoinmentForm()
+# 	return render(request, 'book_session.html', {'form' : form})
+
+def book_session(request, therapist_id):
+	# patient = Therapist.objects.filter(id=id).first()
+	if request.method == "POST":
+		form = TestAppointmentForm(request.POST)
+		if form.is_valid():
+			form.save()
+	form = TestAppointmentForm()
+	return render(request, 'book_session.html', { 'form' : form } )
