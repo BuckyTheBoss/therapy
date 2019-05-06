@@ -17,7 +17,7 @@ from django.contrib.auth import login, authenticate
 
 def profile_edit(request, id):
 	if not request.user.is_patient:
-		return redirect('doctor_profile_edit')
+		return redirect('doctor_profile_edit', doc_id=id)
 	patient = Patient.objects.filter(id=id).first()
 	form = PatientForm(instance=patient)
 	form2 = UserForm(instance=patient.user)
@@ -59,7 +59,7 @@ def index(request):
 	if not request.user.is_patient:
 		return redirect('doctor_index')
 	therapists = Therapist.objects.filter(categories__in=request.user.patient.categories.all()).all()
-	return render(request, 'index.html',{'therapists' : therapists})
+	return render(request, 'index.html', {'therapists' : therapists})
 
 def patient_matched_index(request):
 	return render(request, 'patient_matched_index.html')

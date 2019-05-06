@@ -69,12 +69,19 @@ class Match(models.Model):
 	therapist = models.ForeignKey(Therapist, on_delete=models.CASCADE)
 	timestamp = models.DateTimeField(default=timezone.now)
 
+	def __str__(self):
+		return str(self.timestamp)
+		# example: 2019-05-06 12:08:05.323857+00:00
+
 
 class TherapySession(models.Model):
 	match = models.ForeignKey(Match, on_delete=models.CASCADE)
 	datetime = models.DateTimeField()
 	occured = models.BooleanField(null=True)
 
+	def __str__(self):
+		# return str(self.datetime)
+		return datetime.strftime('%m/%d/%Y')
 
 class TestSession(models.Model):
 	session_time = models.DateTimeField()
