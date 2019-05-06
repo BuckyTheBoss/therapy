@@ -32,18 +32,16 @@
 			{% endfor %}
 			
 		</div>
-		<div class="row">
-			<form method="POST">
+		<div class="row mt-5">
+
+			<form method="POST" class="form-inline">
 				{% csrf_token %}
-				
-				<div class="col-8 input-group mb-3">
-					<input type="text-dark" name="content" class="form-control" placeholder="Start typing..." aria-label="Recipient's username" aria-describedby="button-addon2">
+				<div class="form-group mx-sm-3 mb-2">
+					<label for="content" class="sr-only">Message</label>
+					<input name="content" class="form-control" id="content" placeholder="Start typing...">
 				</div>
-				<div class="col-4 input-group-append">
-					<button class="btn-dark btn-outline-secondary" type="Submit" id="button-addon2">Send</button>
-				</div>
-				
+				<button type="submit" class="btn btn-primary mb-2">Send</button>
 			</form>
+				
 		</div>
-	</div>
 {% endblock %}

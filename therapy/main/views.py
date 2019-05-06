@@ -15,7 +15,7 @@ from .tokens import account_activation_token
 from django.contrib.auth import login, authenticate
 
 
-def profile_edit(request,id):
+def profile_edit(request, id):
 	if not request.user.is_patient:
 		return redirect('doctor_profile_edit')
 	patient = Patient.objects.filter(id=id).first()
@@ -28,14 +28,25 @@ def profile_edit(request,id):
 		if form.is_valid() and form2.is_valid():
 			form.save()
 			form2.save()
-	return render(request, 'profile_edit.html', {'patient' : patient, 'form' : form, 'form2' : form2} )
+	return render(request, 'profile_edit.html', {'patient' : patient, 'form' : form, 'form2' : form2})
 	
 
-def doctor_profile_edit(request):
-	return render(request, 'doctor_profile_edit.html')
+def doctor_profile_edit(request, doc_id):
+	# if request.user.is_patient:
+	# 	return redirect('profile_edit')
+	therapist = Therapist.objects.filter(id=doc_id).first()
+	form = TherapistForm(instance=therapist)
+	form2 = UserForm(instance=therapist.user)
+	if request.method == "POST":
+		form = TherapistForm(request.POST, instance=therapist)
+		form2 = UserForm(request.POST, instance=patient.user)
+		if form.is_valid() and form2.is_valid():
+			form.save()
+			form2.save()
+	return render(request, 'doctor_profile_edit.html', {'therapist' : therapist, 'form' : form, 'form2' : form2})
 
-def doctor_profile(request,id):
-	therapist = Therapist.objects.filter(id=id).first()
+def doctor_profile(request, doc_id):
+	therapist = Therapist.objects.filter(id=doc_id).first()
 	'''this will have the initial chat space display this as a card'''
 	return render(request, 'doctor_profile.html', {'therapist' : therapist})
 
@@ -51,7 +62,6 @@ def index(request):
 	return render(request, 'index.html',{'therapists' : therapists})
 
 def patient_matched_index(request):
-	
 	return render(request, 'patient_matched_index.html')
 
 @login_exempt
@@ -88,6 +98,10 @@ def front(request):
 		return redirect('index')
 	return render(request, 'front.html')
 
+@login_exempt
+def about(request):
+	return render(request, 'about.html')
+
 def patient_chat(request, therapist_id):
 	therapist = Therapist.objects.filter(pk=therapist_id).first()
 	chat = Chat.objects.filter(therapist__id=therapist_id).filter(patient__id=request.user.patient.id).first()
@@ -105,11 +119,6 @@ def patient_chat(request, therapist_id):
 		message.save()
 	messages = Message.objects.filter(chat=chat).count()
 	return render(request, 'chat.html', {'chat' : chat, 'unread_msg_ids' : unread_msg_ids, 'messages' : messages})
-
-
-@login_exempt
-def about(request):
-	return render(request, 'about.html')
 
 
 def therapist_chat(request, chat_id):

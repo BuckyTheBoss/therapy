@@ -16,8 +16,8 @@ urlpatterns = [
     path('profile_edit/<int:id>', views.profile_edit, name='profile_edit'),
 
     path('doctor_index', views.doctor_index, name='doctor_index'),
-    path('doctor_profile_edit', views.doctor_profile_edit, name='doctor_profile_edit'),
-    path('doctor_profile/<int:id>', views.doctor_profile, name='doctor_profile'),
+    path('doctor_profile_edit/<int:doc_id>', views.doctor_profile_edit, name='doctor_profile_edit'),
+    path('doctor_profile/<int:doc_id>', views.doctor_profile, name='doctor_profile'),
 
     path('signup/patient/', views.signup, name='patient_signup'),
     path('patient_matched_index', views.patient_matched_index, name='patient_matched_index'),

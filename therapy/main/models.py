@@ -9,6 +9,17 @@ from django.dispatch import receiver
 
 from tempus_dominus.widgets import DatePicker, TimePicker, DateTimePicker
 
+WORKING_DAY = (
+		(0, 'Sunday'),
+		(1, 'Monday'),
+		(2, 'Tuesday'),
+		(3, 'Wednesday'),
+		(4, 'Thrusday'),
+		(5, 'Friday'),
+		(6, 'Saturday'),
+	)
+	
+
 class User(AbstractUser):
 	is_patient = models.BooleanField(default=True)
 
@@ -28,6 +39,7 @@ class Therapist(models.Model):
 	gender = models.CharField(max_length=30, null=True)
 	birthdate = models.DateField(null=True)
 	bio = models.TextField(null=True)
+	working_day = models.CharField(max_length=30, choices=WORKING_DAY, null=True)
 
 
 class Patient(models.Model):
