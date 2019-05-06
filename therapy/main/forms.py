@@ -77,29 +77,29 @@ class TherapistForm(forms.ModelForm):
 		fields = ('address', 'experience', 'education', 'languages', 'categories', 'gender', 'birthdate', 'bio')
 
 
-class TestAppointmentForm(forms.ModelForm):
-	class Meta:
-		model = TestSession
-		fields = ('session_time',)
-		widgets = DateTimePicker(
-			options={
-				'minDate': (
-					datetime.date.today() + datetime.timedelta(days=1)
-				).strftime(
-					'%Y-%m-%d'
-				),  # Tomorrow
-				'useCurrent': True,
-				'collapse': False,
-				'sideBySide': True,
-				'daysOfWeekDisabled': [0,2,4,5,6], 
-				'enabledHours': [10, 11, 12],
+# class TestAppointmentForm(forms.ModelForm):
+# 	class Meta:
+# 		model = TestSession
+# 		fields = ('session_time',)
+# 		widgets = DateTimePicker(
+# 			options={
+# 				'minDate': (
+# 					datetime.date.today() + datetime.timedelta(days=1)
+# 				).strftime(
+# 					'%Y-%m-%d'
+# 				),  # Tomorrow
+# 				'useCurrent': True,
+# 				'collapse': False,
+# 				'sideBySide': True,
+# 				'daysOfWeekDisabled': [0,2,4,5,6], 
+# 				'enabledHours': [10, 11, 12],
 
-			},
-			attrs={
-				'append': 'fa fa-calendar',
-				'icon_toggle': True,
-			}
-		),        
+# 			},
+# 			attrs={
+# 				'append': 'fa fa-calendar',
+# 				'icon_toggle': True,
+# 			}
+# 		),        
 
 class CustomUserCreationForm(UserCreationForm):
 	class Meta:

@@ -26,15 +26,12 @@ urlpatterns = [
     path('therapist/chat/<int:chat_id>', views.therapist_chat, name='doc_chat'),
 
     path('patient/<int:patient_id>/chats', views.all_patient_chats , name='all_patient_chats'),
-<<<<<<< HEAD
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         views.activate, name='activate'),
-=======
 
     path('book/<int:therapist_id>', views.book_session, name='book_session'),
 
 
->>>>>>> 9278dbbcc1038d13f9df824690bf2304b9356642
 ]
 
 
