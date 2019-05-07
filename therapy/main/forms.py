@@ -58,13 +58,13 @@ class PatientForm(forms.ModelForm):
 class TherapistForm(forms.ModelForm):
 	class Meta:
 		model = Therapist
-		fields = ('address', 'experience', 'education', 'languages', 'categories', 'gender', 'birthdate', 'bio', 'working_day')
+		fields = ('address', 'experience', 'education', 'languages', 'categories', 'gender', 'birthdate', 'bio', 'working_days')
 		
 		categories = forms.ModelMultipleChoiceField(queryset=Category.objects.all())
-		working_day = forms.MultipleChoiceField(
-				required=False,
-				widget=forms.CheckboxSelectMultiple,
-				choices=WORKING_DAY,)
+		working_days = forms.ModelMultipleChoiceField(
+				queryset=Day.objects.all(),
+				widget=forms.CheckboxSelectMultiple
+				)
 		
 		widgets = {
 			'birthdate' : DatePicker(

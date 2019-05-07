@@ -9,16 +9,12 @@ from django.dispatch import receiver
 
 from tempus_dominus.widgets import DatePicker, TimePicker, DateTimePicker
 
-WORKING_DAY = (
-		(0, 'Sunday'),
-		(1, 'Monday'),
-		(2, 'Tuesday'),
-		(3, 'Wednesday'),
-		(4, 'Thrusday'),
-		(5, 'Friday'),
-		(6, 'Saturday'),
-	)
-	
+class Day(models.Model):
+	name = models.CharField(max_length=20)
+	daycode = models.IntegerField(null=True)
+
+class Hour(models.Model):
+	name = models.IntegerField()
 
 class User(AbstractUser):
 	is_patient = models.BooleanField(default=True)
@@ -39,7 +35,9 @@ class Therapist(models.Model):
 	gender = models.CharField(max_length=30, null=True)
 	birthdate = models.DateField(null=True)
 	bio = models.TextField(null=True)
-	working_day = models.CharField(max_length=30, choices=WORKING_DAY, null=True)
+	working_days = models.ManyToManyField(Day)
+	working_hours = models.ManyToManyField(Hour)
+
 
 
 class Patient(models.Model):
@@ -75,9 +73,10 @@ class Match(models.Model):
 
 
 class TherapySession(models.Model):
-	match = models.ForeignKey(Match, on_delete=models.CASCADE)
 	datetime = models.DateTimeField()
 	occured = models.BooleanField(null=True)
+	therapist = models.ForeignKey(Therapist, on_delete=models.CASCADE, null=True)
+	patient = models.ForeignKey(Patient, on_delete=models.CASCADE, null=True)
 
 	# def __str__(self):
 	# 	# return str(self.datetime)

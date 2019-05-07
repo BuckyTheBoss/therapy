@@ -29,7 +29,9 @@ def profile_edit(request, id):
 		if form.is_valid() and form2.is_valid():
 			form.save()
 			form2.save()
+			return redirect('index')
 	return render(request, 'profile_edit.html', {'patient' : patient, 'form' : form, 'form2' : form2})
+
 	
 
 def doctor_profile_edit(request, doc_id):
