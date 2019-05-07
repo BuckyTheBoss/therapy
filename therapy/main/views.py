@@ -1,3 +1,5 @@
+import pytz, datetime
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.core.mail import send_mail, EmailMessage
@@ -22,7 +24,6 @@ def profile_edit(request, id):
 	form = PatientForm(instance=patient)
 	form2 = UserForm(instance=patient.user)
 	if request.method == "POST":
-		# print(request.POST)
 		form = PatientForm(request.POST, instance=patient)
 		form2 = UserForm(request.POST, instance=patient.user)
 		if form.is_valid() and form2.is_valid():
@@ -32,8 +33,8 @@ def profile_edit(request, id):
 	
 
 def doctor_profile_edit(request, doc_id):
-	# if request.user.is_patient:
-	# 	return redirect('profile_edit')
+	if request.user.is_patient:
+		return redirect('profile_edit')
 	therapist = Therapist.objects.filter(id=doc_id).first()
 	form = TherapistForm(instance=therapist)
 	form2 = UserForm(instance=therapist.user)
@@ -164,6 +165,10 @@ def book_session(request, therapist_id):
 	print(request.user)
 	therapist = Therapist.objects.filter(pk=therapist_id).first()
 	if request.method == 'POST':
+		appt_dt = datetime.datetime.strptime(request.POST['Select_an_available_session'], '%Y-%m-%d %H:%M:%S')
+		print(request.POST['Select_an_available_session'])
+		apptime = pytz.timezone('UTC').localize(appt_dt)
+
 		form = AppoinmentForm(request.POST)
 		if form.is_valid():
 			match = Match.objects.filter(patient=request.user.patient, therapist=therapist).first() 
@@ -171,7 +176,8 @@ def book_session(request, therapist_id):
 				match = Match(patient=request.user.patient, therapist=therapist)
 				match.save()
 
-			therapy_session = TherapySession(match=match, datetime=request.POST['Select_an_available_session'])
+			therapy_session = TherapySession(match=match, datetime=apptime)
+			
 			therapy_session.save()			
 			return HttpResponse('<h1>session booked!</h1>')
 

@@ -163,7 +163,7 @@ class AppoinmentForm(forms.Form):
 				'collapse': False,
 				'sideBySide': True,
 				'daysOfWeekDisabled': [0,2,4,5,6], 
-				'enabledHours': [10, 11, 12],
+				'enabledHours': [10, 11, 12, 14],
 
 			},
 			attrs={

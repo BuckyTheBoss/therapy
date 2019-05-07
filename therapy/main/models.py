@@ -1,4 +1,4 @@
-import datetime 
+import datetime
 
 from django.db import models
 from django.forms import ModelForm
@@ -79,9 +79,9 @@ class TherapySession(models.Model):
 	datetime = models.DateTimeField()
 	occured = models.BooleanField(null=True)
 
-	def __str__(self):
-		# return str(self.datetime)
-		return datetime.strftime('%m/%d/%Y')
+	# def __str__(self):
+	# 	# return str(self.datetime)
+	# 	return datetime.strftime('%m/%d/%Y')
 
 class TestSession(models.Model):
 	session_time = models.DateTimeField()
