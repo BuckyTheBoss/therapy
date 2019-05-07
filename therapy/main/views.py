@@ -166,28 +166,14 @@ def activate(request, uidb64, token):
 		return HttpResponse('Activation link is invalid!')
 
 def book_session(request, therapist_id):
-	print(request.user)
 	therapist = Therapist.objects.filter(pk=therapist_id).first()
-	if request.method == 'POST':
-		appt_dt = datetime.datetime.strptime(request.POST['Select_an_available_session'], '%Y-%m-%d %H:%M:%S')
-		print(request.POST['Select_an_available_session'])
-		apptime = pytz.timezone('UTC').localize(appt_dt)
+	return render(request, 'book_session.html', {'therapist' : therapist})
 
-		form = AppoinmentForm(request.POST)
-		if form.is_valid():
-			match = Match.objects.filter(patient=request.user.patient, therapist=therapist).first() 
-			if match == None:
-				match = Match(patient=request.user.patient, therapist=therapist)
-				match.save()
-
-			therapy_session = TherapySession(match=match, datetime=apptime)
-			
-			therapy_session.save()			
-			return HttpResponse('<h1>session booked!</h1>')
-	form = AppoinmentForm()
-	return render(request, 'book_session.html', {'form' : form})
-
-
+def pick_session(request, therapy_session_id):
+	therapy_session = TherapySession.objects.filter(pk=therapy_session_id).first()
+	therapy_session.patient = request.user.patient
+	therapy_session.save()
+	return redirect('index')
 
 
 @login_exempt

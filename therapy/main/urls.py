@@ -30,6 +30,7 @@ urlpatterns = [
 
     path('book/<int:therapist_id>', views.book_session, name='book_session'),
     path('showimage', views.showimage, name='showimage'),
+    path('pick_session/<int:therapy_session_id>', views.pick_session, name='pick_session')
 ]
 
 

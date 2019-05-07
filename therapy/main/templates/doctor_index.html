@@ -20,12 +20,13 @@
 	</div>
 	<div class="col-5">
 		<h1>Appointments</h1>
+		<ul>
 		{% for appointment in request.user.therapist.therapysession_set.all %}
 			{% if appointment.patient %}
-				{{appointment.pk}}
+				<a class="btn btn-outline-dark" href="">Appointment with {{appointment.patient.user.first_name}} {{appointment.patient.user.last_name}}<br>{{appointment.datetime}}</a>
 			{% endif %}
 		{% endfor %}
-
+		</ul>
 	</div>
 </div>
 {% endblock %}
