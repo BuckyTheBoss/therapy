@@ -29,9 +29,9 @@ urlpatterns = [
         views.activate, name='activate'),
 
     path('book/<int:therapist_id>', views.book_session, name='book_session'),
-
-
+    path('showimage', views.showimage, name='showimage'),
 ]
+
 
 
 

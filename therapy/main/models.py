@@ -143,3 +143,17 @@ class Message(models.Model):
 	chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
 	timestamp = models.DateTimeField(default=timezone.now)
 	read = models.BooleanField(default=False)
+
+
+
+
+
+class Image(models.Model):
+    name= models.CharField(max_length=500)
+    imagefile= models.FileField(upload_to='images/', null=True, verbose_name="")
+
+    def __str__(self):
+        return self.name + ": " + str(self.imagefile)
+
+
+

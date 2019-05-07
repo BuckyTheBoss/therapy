@@ -15,6 +15,8 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.contrib.auth import login, authenticate
+from .models import Image
+from .forms import ImageForm
 
 
 def profile_edit(request, id):
@@ -182,15 +184,25 @@ def book_session(request, therapist_id):
 			
 			therapy_session.save()			
 			return HttpResponse('<h1>session booked!</h1>')
-
 	form = AppoinmentForm()
 	return render(request, 'book_session.html', {'form' : form})
 
-# def book_session(request, therapist_id):
-# 	# patient = Therapist.objects.filter(id=id).first()
-# 	if request.method == "POST":
-# 		form = TestAppointmentForm(request.POST)
-# 		if form.is_valid():
-# 			form.save()
-# 	form = TestAppointmentForm()
-# 	return render(request, 'book_session.html', { 'form' : form } )
+
+
+
+@login_exempt
+def showimage(request):
+    lastimage= Image.objects.last()
+    imagefile= lastimage.imagefile
+    form= ImageForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        form.save()
+
+    context= {'imagefile': imagefile,
+              'form': form
+              }
+    
+      
+    return render(request, 'image.html', context)
+
+    
