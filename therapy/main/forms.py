@@ -156,3 +156,12 @@ class AppoinmentForm(forms.Form):
 			}
 		),
 	)
+
+
+
+
+
+class ImageForm(forms.ModelForm):
+    class Meta:
+        model= Image
+        fields= ["name", "imagefile"]

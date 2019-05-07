@@ -13,6 +13,8 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.contrib.auth import login, authenticate
+from .models import Image
+from .forms import ImageForm
 
 
 def profile_edit(request,id):
@@ -177,3 +179,21 @@ def book_session(request, therapist_id):
 			form.save()
 	form = TestAppointmentForm()
 	return render(request, 'book_session.html', { 'form' : form } )
+
+
+
+
+@login_exempt
+def showimage(request):
+    lastimage= Image.objects.last()
+    imagefile= lastimage.imagefile
+    form= ImageForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        form.save()
+
+    context= {'imagefile': imagefile,
+              'form': form
+              }
+    
+      
+    return render(request, 'image.html', context)
