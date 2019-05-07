@@ -1,3 +1,5 @@
+import pytz, datetime
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.core.mail import send_mail, EmailMessage
@@ -17,27 +19,39 @@ from .models import Image
 from .forms import ImageForm
 
 
-def profile_edit(request,id):
+def profile_edit(request, id):
 	if not request.user.is_patient:
-		return redirect('doctor_profile_edit')
+		return redirect('doctor_profile_edit', doc_id=id)
 	patient = Patient.objects.filter(id=id).first()
 	form = PatientForm(instance=patient)
 	form2 = UserForm(instance=patient.user)
 	if request.method == "POST":
-		# print(request.POST)
 		form = PatientForm(request.POST, instance=patient)
 		form2 = UserForm(request.POST, instance=patient.user)
 		if form.is_valid() and form2.is_valid():
 			form.save()
 			form2.save()
-	return render(request, 'profile_edit.html', {'patient' : patient, 'form' : form, 'form2' : form2} )
+			return redirect('index')
+	return render(request, 'profile_edit.html', {'patient' : patient, 'form' : form, 'form2' : form2})
+
 	
 
-def doctor_profile_edit(request):
-	return render(request, 'doctor_profile_edit.html')
+def doctor_profile_edit(request, doc_id):
+	if request.user.is_patient:
+		return redirect('profile_edit')
+	therapist = Therapist.objects.filter(id=doc_id).first()
+	form = TherapistForm(instance=therapist)
+	form2 = UserForm(instance=therapist.user)
+	if request.method == "POST":
+		form = TherapistForm(request.POST, instance=therapist)
+		form2 = UserForm(request.POST, instance=patient.user)
+		if form.is_valid() and form2.is_valid():
+			form.save()
+			form2.save()
+	return render(request, 'doctor_profile_edit.html', {'therapist' : therapist, 'form' : form, 'form2' : form2})
 
-def doctor_profile(request,id):
-	therapist = Therapist.objects.filter(id=id).first()
+def doctor_profile(request, doc_id):
+	therapist = Therapist.objects.filter(id=doc_id).first()
 	'''this will have the initial chat space display this as a card'''
 	return render(request, 'doctor_profile.html', {'therapist' : therapist})
 
@@ -50,10 +64,9 @@ def index(request):
 	if not request.user.is_patient:
 		return redirect('doctor_index')
 	therapists = Therapist.objects.filter(categories__in=request.user.patient.categories.all()).all()
-	return render(request, 'index.html',{'therapists' : therapists})
+	return render(request, 'index.html', {'therapists' : therapists})
 
 def patient_matched_index(request):
-	
 	return render(request, 'patient_matched_index.html')
 
 @login_exempt
@@ -90,6 +103,10 @@ def front(request):
 		return redirect('index')
 	return render(request, 'front.html')
 
+@login_exempt
+def about(request):
+	return render(request, 'about.html')
+
 def patient_chat(request, therapist_id):
 	therapist = Therapist.objects.filter(pk=therapist_id).first()
 	chat = Chat.objects.filter(therapist__id=therapist_id).filter(patient__id=request.user.patient.id).first()
@@ -107,11 +124,6 @@ def patient_chat(request, therapist_id):
 		message.save()
 	messages = Message.objects.filter(chat=chat).count()
 	return render(request, 'chat.html', {'chat' : chat, 'unread_msg_ids' : unread_msg_ids, 'messages' : messages})
-
-
-@login_exempt
-def about(request):
-	return render(request, 'about.html')
 
 
 def therapist_chat(request, chat_id):
@@ -153,32 +165,27 @@ def activate(request, uidb64, token):
 	else:
 		return HttpResponse('Activation link is invalid!')
 
-# def book_session(request, therapist_id):
-# 	print(request.user)
-# 	therapist = Therapist.objects.filter(pk=therapist_id).first()
-# 	if request.method == 'POST':
-# 		form = AppoinmentForm(request.POST)
-# 		if form.is_valid():
-# 			match = Match.objects.filter(patient=request.user.patient, therapist=therapist).first() 
-# 			if match == None:
-# 				match = Match(patient=request.user.patient, therapist=therapist)
-# 				match.save()
-
-# 			therapy_session = TherapySession(match=match, datetime=request.POST['Select_an_available_session'])
-# 			therapy_session.save()			
-# 			return HttpResponse('<h1>session booked!</h1>')
-
-# 	form = AppoinmentForm()
-# 	return render(request, 'book_session.html', {'form' : form})
-
 def book_session(request, therapist_id):
-	# patient = Therapist.objects.filter(id=id).first()
-	if request.method == "POST":
-		form = TestAppointmentForm(request.POST)
+	print(request.user)
+	therapist = Therapist.objects.filter(pk=therapist_id).first()
+	if request.method == 'POST':
+		appt_dt = datetime.datetime.strptime(request.POST['Select_an_available_session'], '%Y-%m-%d %H:%M:%S')
+		print(request.POST['Select_an_available_session'])
+		apptime = pytz.timezone('UTC').localize(appt_dt)
+
+		form = AppoinmentForm(request.POST)
 		if form.is_valid():
-			form.save()
-	form = TestAppointmentForm()
-	return render(request, 'book_session.html', { 'form' : form } )
+			match = Match.objects.filter(patient=request.user.patient, therapist=therapist).first() 
+			if match == None:
+				match = Match(patient=request.user.patient, therapist=therapist)
+				match.save()
+
+			therapy_session = TherapySession(match=match, datetime=apptime)
+			
+			therapy_session.save()			
+			return HttpResponse('<h1>session booked!</h1>')
+	form = AppoinmentForm()
+	return render(request, 'book_session.html', {'form' : form})
 
 
 
@@ -197,3 +204,5 @@ def showimage(request):
     
       
     return render(request, 'image.html', context)
+
+    

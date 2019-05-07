@@ -2,6 +2,9 @@ import os
 import random
 import django
 from faker import Faker
+from datetime import date, datetime, timedelta
+from django.utils import timezone
+
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'therapy.settings')
 
@@ -13,6 +16,15 @@ fake = Faker()
 
 def gen_fname():
 	return fake.first_name()
+
+
+def date_list(start_date=timezone.now(), end_date=(timezone.now() + timedelta(days=60)), delta=timedelta(days=1)):
+    current_date = start_date
+    days = []
+    while current_date < end_date:
+        days.append(current_date)
+        current_date += delta
+    return days
 
 def gen_lname():
 	return fake.last_name()
@@ -44,6 +56,17 @@ def pick_category(categories=None):
 	if categories != None:
 		return random.choice(Category.objects.exclude(name=categories.name).all())
 	return random.choice(Category.objects.all())
+
+def pick_days():
+	day1 = random.choice(Day.objects.all())
+	day2 = random.choice(Day.objects.exclude(name=day1.name).all())
+	return [day1,day2]
+
+def pick_hours():
+	hour1 = random.choice(Hour.objects.all())
+	hour2 = random.choice(Hour.objects.exclude(name=hour1.name))
+	hour3 = random.choice(Hour.objects.exclude(name=hour1.name).exclude(name=hour2.name))
+	return [hour1,hour2,hour3]
 
 def create_patient_users(number):
 	'''create x users'''
@@ -102,6 +125,57 @@ def create_therapist_users(number):
 		users.append(userdict)
 	print(users)
 
+
+def seed_days():
+	daycode = 0
+	for i in ['Monday','Tuesday','Wednesday','Thursday','Friday']:
+		day = Day(name=i, daycode=daycode)
+		day.save()
+		daycode += 1
+
+
+def seed_hours():
+	for n in [10,11,12,13,14,15,16,17]:
+		hour = Hour(name=n)
+		hour.save()
+
+
+def seed_doc_day_times():
+	for profile in Therapist.objects.all():
+		hours = pick_hours()
+		days = pick_days()
+		profile.working_hours.add(*hours)
+		profile.working_days.add(*days)
+
+
+def seed_appts():
+	appt_list = []
+	days = date_list()
+	for profile in Therapist.objects.all():
+		for day in days:
+			working_days = []
+			for working_day in profile.working_days.all():
+				working_days.append(working_day.daycode)
+			if day.weekday() in working_days:
+				print('success')
+				for hour in profile.working_hours.all():
+					print('success2')
+					string = f'{day.year}-{day.month}-{day.day} {hour.name}:00:00'
+					appt_dt = datetime.datetime.strptime(string, '%Y-%m-%d %H:%M:%S')
+					t_session = TherapySession(datetime=appt_dt, therapist=profile)
+					appt_list.append(t_session)
+	TherapySession.objects.bulk_create(appt_list)
+
+
+
+
+
+if Hour.objects.all().count() == 0:
+	seed_hours()
+
+if Day.objects.all().count() == 0:
+	seed_days()
+
 if Category.objects.all().count() == 0:
 	create_categories()
 
@@ -109,8 +183,12 @@ if Category.objects.all().count() == 0:
 if Therapist.objects.all().count() == 0:
 	create_therapist_users(10)
 	seed_therapist()
+	seed_doc_day_times()
+
+if Patient.objects.all().count() == 0:
+	create_patient_users(10)
+	seed_patient_profile()
 
 
-# if Patient.objects.all().count() == 0:
-# 	create_patient_users(10)
-# 	seed_patient_profile()
+if TherapySession.objects.all().count() == 0:
+	seed_appts()

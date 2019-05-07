@@ -42,22 +42,6 @@ class PatientForm(forms.ModelForm):
 				'icon_toggle': True},)
 			}
 
-	#         options=
-	#         {
-	#         'daysOfWeekDisabled': [1,4],
-	#         }, 'sideBySide'=True,
-	#         # options={
-	#         #     'minDate': 'today',
-	#         #     'maxDate': '2020-01-01',
-
-		# class AuthorForm(ModelForm):
-  #   	class Meta:
-  #       model = Author
-  #       fields = ('name', 'title', 'birth_date')
-  #       widgets = {
-  #           'name': Textarea(attrs={'cols': 80, 'rows': 20}),
-  #       }
-
 	def __init__(self, *args, **kwargs):
 		if kwargs.get('instance'):
 			initial = kwargs.setdefault('initial', {})
@@ -74,32 +58,64 @@ class PatientForm(forms.ModelForm):
 class TherapistForm(forms.ModelForm):
 	class Meta:
 		model = Therapist
-		fields = ('address', 'experience', 'education', 'languages', 'categories', 'gender', 'birthdate', 'bio')
+		fields = ('address', 'experience', 'education', 'languages', 'categories', 'gender', 'birthdate', 'bio', 'working_days')
+		
+		categories = forms.ModelMultipleChoiceField(queryset=Category.objects.all())
+		working_days = forms.ModelMultipleChoiceField(
+				queryset=Day.objects.all(),
+				widget=forms.CheckboxSelectMultiple
+				)
+		
+		widgets = {
+			'birthdate' : DatePicker(
+				options={
+				'mixDate': '1900-01-01',
+				'maxDate': '2019-05-01'}, 
+				attrs={
+				'append' : 'fa fa-calendar',
+				'icon_toggle': True},) 
 
-
-class TestAppointmentForm(forms.ModelForm):
-	class Meta:
-		model = TestSession
-		fields = ('session_time',)
-		widgets = DateTimePicker(
-			options={
-				'minDate': (
-					datetime.date.today() + datetime.timedelta(days=1)
-				).strftime(
-					'%Y-%m-%d'
-				),  # Tomorrow
-				'useCurrent': True,
-				'collapse': False,
-				'sideBySide': True,
-				'daysOfWeekDisabled': [0,2,4,5,6], 
-				'enabledHours': [10, 11, 12],
-
-			},
-			attrs={
-				'append': 'fa fa-calendar',
-				'icon_toggle': True,
+			# 'working_day' : forms.MultipleChoiceField(
+			# 	required=False,
+			# 	widget=forms.CheckboxSelectMultiple,
+			# 	choices=WORKING_DAY,)
 			}
-		),        
+
+	def __init__(self, *args, **kwargs):
+		if kwargs.get('instance'):
+			initial = kwargs.setdefault('initial', {})
+			initial['categories'] = [cat.pk for cat in kwargs['instance'].categories.all()]
+		forms.ModelForm.__init__(self, *args, **kwargs)
+
+	def save(self):
+		instance = forms.ModelForm.save(self)
+		instance.categories.clear()
+		instance.categories.add(*self.cleaned_data['categories'])
+		return instance
+
+# class TestAppointmentForm(forms.ModelForm):
+# 	class Meta:
+# 		model = TestSession
+# 		fields = ('session_time',)
+# 		widgets = DateTimePicker(
+# 			options={
+# 				'minDate': (
+# 					datetime.date.today() + datetime.timedelta(days=1)
+# 				).strftime(
+# 					'%Y-%m-%d'
+# 				),  # Tomorrow
+# 				'useCurrent': True,
+# 				'collapse': False,
+# 				'sideBySide': True,
+# 				'daysOfWeekDisabled': [0,2,4,5,6], 
+# 				'enabledHours': [10, 11, 12],
+
+# 			},
+# 			attrs={
+# 				'append': 'fa fa-calendar',
+# 				'icon_toggle': True,
+# 			}
+# 		),        
 
 class CustomUserCreationForm(UserCreationForm):
 	class Meta:
@@ -147,7 +163,7 @@ class AppoinmentForm(forms.Form):
 				'collapse': False,
 				'sideBySide': True,
 				'daysOfWeekDisabled': [0,2,4,5,6], 
-				'enabledHours': [10, 11, 12],
+				'enabledHours': [10, 11, 12, 14],
 
 			},
 			attrs={

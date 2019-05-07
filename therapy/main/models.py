@@ -1,4 +1,4 @@
-import datetime 
+import datetime
 
 from django.db import models
 from django.forms import ModelForm
@@ -8,6 +8,13 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from tempus_dominus.widgets import DatePicker, TimePicker, DateTimePicker
+
+class Day(models.Model):
+	name = models.CharField(max_length=20)
+	daycode = models.IntegerField(null=True)
+
+class Hour(models.Model):
+	name = models.IntegerField()
 
 class User(AbstractUser):
 	is_patient = models.BooleanField(default=True)
@@ -28,6 +35,9 @@ class Therapist(models.Model):
 	gender = models.CharField(max_length=30, null=True)
 	birthdate = models.DateField(null=True)
 	bio = models.TextField(null=True)
+	working_days = models.ManyToManyField(Day)
+	working_hours = models.ManyToManyField(Hour)
+
 
 
 class Patient(models.Model):
@@ -57,12 +67,20 @@ class Match(models.Model):
 	therapist = models.ForeignKey(Therapist, on_delete=models.CASCADE)
 	timestamp = models.DateTimeField(default=timezone.now)
 
+	def __str__(self):
+		return str(self.timestamp)
+		# example: 2019-05-06 12:08:05.323857+00:00
+
 
 class TherapySession(models.Model):
-	match = models.ForeignKey(Match, on_delete=models.CASCADE)
 	datetime = models.DateTimeField()
 	occured = models.BooleanField(null=True)
+	therapist = models.ForeignKey(Therapist, on_delete=models.CASCADE, null=True)
+	patient = models.ForeignKey(Patient, on_delete=models.CASCADE, null=True)
 
+	# def __str__(self):
+	# 	# return str(self.datetime)
+	# 	return datetime.strftime('%m/%d/%Y')
 
 class TestSession(models.Model):
 	session_time = models.DateTimeField()
