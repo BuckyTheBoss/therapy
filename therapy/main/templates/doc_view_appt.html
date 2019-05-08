@@ -5,35 +5,34 @@
 		<div class="row">
 			<div class="col">
 				<h1>Appointment with {{appointment.patient.user.first_name}} {{appointment.patient.user.last_name}}</h1>
-				{% if appointment.datetime > now and appointment.occured == None%}
-					<h2 class="ml-5">Starting at: {{appointment.datetime}}</h2>
-				{% elif appointment.occured == None %}
-					<h2 class="ml-5">Scheduled for: {{appointment.datetime}}</h2>
-					<h2 class="ml-5">Did your patient show up?</h2>
-					<a href="{% url 'mark_attendance' appointment.id 1 %}" class="btn btn-outline-success ml-5">Yes</a>
-					<a href="{% url 'mark_attendance' appointment.id 0 %}" class="btn btn-outline-danger ">No</a>
+				{% if appointment.occured == None %}
+					{% if appointment.datetime > now %}
+						<h2 class="ml-5">Starting at: {{appointment.datetime}}</h2>
+					{% else %}
+						<h2 class="ml-5">Scheduled for: {{appointment.datetime}}</h2>
+						<h2 class="ml-5">Did your patient show up?</h2>
+						<a href="{% url 'mark_attendance' appointment.id 1 %}" class="btn btn-outline-success ml-5">Yes</a>
+						<a href="{% url 'mark_attendance' appointment.id 0 %}" class="btn btn-outline-danger ">No</a>
+					{% endif %}
+
 				{% elif appointment.occured == True %}
 					{% if appointment.sessionlog_set.all.count == 0 %}
-					<form method="POST">
-						{% csrf_token %}
-						{{form | crispy}}
-						<button class="btn btn-outline-primary" type="submit">Save</button>
-					</form>
+						<form method="POST">
+							{% csrf_token %}
+							{{form | crispy}}
+							<button class="btn btn-outline-primary" type="submit">Save</button>
+						</form>
 					{% else%}
-						<h2>Scheduled for: {{appointment.datetime}}</h2>
-						
-						<h2>Patient Attended?: {% if appointment.occured %}Yes{% else %}No {% endif%}</h2>
-
+						<h2>Occured on: {{appointment.datetime}}</h2>
+						<h2>Patient Attended?: Yes</h2>
 					{% endif %}
-				
-				{% else %}
+				{% elif appointment.occured == False %}
 					<h2 class="ml-5">Scheduled for: {{appointment.datetime}}</h2>
 					<h2>Patient did not show up.</h2>
 					<a href="{% url 'doc_chat' chat.id %}">Chat</a>
 				{% endif %}
 			</div>
 		</div>
-
 		<div class="row mt-5">
 			<div class="col-6">
 				<h3>Patient Details:</h3>
