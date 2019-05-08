@@ -167,9 +167,6 @@ def seed_appts():
 	TherapySession.objects.bulk_create(appt_list)
 
 
-
-
-
 if Hour.objects.all().count() == 0:
 	seed_hours()
 

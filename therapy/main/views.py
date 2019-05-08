@@ -63,7 +63,7 @@ def doctor_index(request):
 def index(request):
 	if not request.user.is_patient:
 		return redirect('doctor_index')
-	therapists = Therapist.objects.filter(categories__in=request.user.patient.categories.all()).all()
+	therapists = Therapist.objects.filter(categories__in=request.user.patient.categories.all()).distinct()
 	return render(request, 'index.html', {'therapists' : therapists})
 
 def patient_matched_index(request):
