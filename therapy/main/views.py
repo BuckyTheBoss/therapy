@@ -194,7 +194,7 @@ def showimage(request):
     
 def view_session(request, therapy_session_id):
 	appointment = TherapySession.objects.filter(pk=therapy_session_id).first()
-	chat = Chat.objects.filter(therapist=request.user, patient=appointment.patient)
+	chat = Chat.objects.filter(therapist=request.user.therapist, patient=appointment.patient)
 	if request.user != appointment.therapist.user:
 		return redirect('index')
 
