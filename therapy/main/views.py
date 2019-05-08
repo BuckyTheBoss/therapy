@@ -193,7 +193,11 @@ def showimage(request):
 
     
 def view_session(request, therapy_session_id):
+
 	appointment = TherapySession.objects.filter(pk=therapy_session_id).first()
+	if request.user != appointment.therapist.user:
+		return redirect('index')
+
 	if request.method == 'POST':
 		form = TherapistSessionLogForm(request.POST)
 		if form.is_valid():
