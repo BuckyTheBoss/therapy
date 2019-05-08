@@ -193,8 +193,8 @@ def showimage(request):
 
     
 def view_session(request, therapy_session_id):
-
 	appointment = TherapySession.objects.filter(pk=therapy_session_id).first()
+	chat = Chat.objects.filter(therapist=request.user, patient=appointment.patient)
 	if request.user != appointment.therapist.user:
 		return redirect('index')
 
@@ -212,7 +212,7 @@ def view_session(request, therapy_session_id):
 		session_logs.append(SessionLog.objects.filter(therapysession=appt).first())
 
 	form = TherapistSessionLogForm()
-	return render(request, 'doc_view_appt.html', {'appointment' : appointment, 'now' : now, 'session_logs' : session_logs, 'form' : form})
+	return render(request, 'doc_view_appt.html', {'appointment' : appointment, 'now' : now, 'session_logs' : session_logs, 'form' : form, 'chat' : chat})
 
 
 def mark_attendance(request, therapy_session_id , attendance):

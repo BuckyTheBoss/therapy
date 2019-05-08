@@ -12,7 +12,7 @@
 					<h2 class="ml-5">Did your patient show up?</h2>
 					<a href="{% url 'mark_attendance' appointment.id 1 %}" class="btn btn-outline-success ml-5">Yes</a>
 					<a href="{% url 'mark_attendance' appointment.id 0 %}" class="btn btn-outline-danger ">No</a>
-				{% else %}
+				{% elif appointment.occured == True %}
 					{% if appointment.sessionlog_set.all.count == 0 %}
 					<form method="POST">
 						{% csrf_token %}
@@ -25,6 +25,11 @@
 						<h2>Patient Attended?: {% if appointment.occured %}Yes{% else %}No {% endif%}</h2>
 
 					{% endif %}
+				
+				{% else %}
+					<h2 class="ml-5">Scheduled for: {{appointment.datetime}}</h2>
+					<h2>Patient did not show up.</h2>
+					<a href="{% url 'doc_chat' chat.id %}">Chat</a>
 				{% endif %}
 			</div>
 		</div>
