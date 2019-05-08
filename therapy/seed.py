@@ -18,13 +18,14 @@ def gen_fname():
 	return fake.first_name()
 
 
-def date_list(start_date=timezone.now(), end_date=(timezone.now() + timedelta(days=60)), delta=timedelta(days=1)):
-    current_date = start_date
-    days = []
-    while current_date < end_date:
-        days.append(current_date)
-        current_date += delta
-    return days
+def date_list(start_date=timezone.now(), delta=timedelta(days=1)):
+	end_date = (start_date + timedelta(days=60))
+	current_date = start_date
+	days = []
+	while current_date < end_date:
+		days.append(current_date)
+		current_date += delta
+	return days
 
 def gen_lname():
 	return fake.last_name()
@@ -166,7 +167,23 @@ def seed_appts():
 					appt_list.append(t_session)
 	TherapySession.objects.bulk_create(appt_list)
 
-
+def seed_new_appts():
+	appt_list = []
+	days = date_list(TherapySession.objects.last().datetime)
+	for profile in Therapist.objects.all():
+		for day in days:
+			working_days = []
+			for working_day in profile.working_days.all():
+				working_days.append(working_day.daycode)
+			if day.weekday() in working_days:
+				print('success')
+				for hour in profile.working_hours.all():
+					print('success2')
+					string = f'{day.year}-{day.month}-{day.day} {hour.name}:00:00'
+					appt_dt = datetime.datetime.strptime(string, '%Y-%m-%d %H:%M:%S')
+					t_session = TherapySession(datetime=appt_dt, therapist=profile)
+					appt_list.append(t_session)
+	TherapySession.objects.bulk_create(appt_list)
 
 
 

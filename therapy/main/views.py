@@ -63,7 +63,7 @@ def doctor_index(request):
 def index(request):
 	if not request.user.is_patient:
 		return redirect('doctor_index')
-	therapists = Therapist.objects.filter(categories__in=request.user.patient.categories.all()).all()
+	therapists = Therapist.objects.filter(categories__in=request.user.patient.categories.all()).distinct()
 	return render(request, 'index.html', {'therapists' : therapists})
 
 def patient_matched_index(request):
@@ -167,7 +167,8 @@ def activate(request, uidb64, token):
 
 def book_session(request, therapist_id):
 	therapist = Therapist.objects.filter(pk=therapist_id).first()
-	return render(request, 'book_session.html', {'therapist' : therapist})
+	now = timezone.now()
+	return render(request, 'book_session.html', {'therapist' : therapist, 'now' : now})
 
 def pick_session(request, therapy_session_id):
 	therapy_session = TherapySession.objects.filter(pk=therapy_session_id).first()
