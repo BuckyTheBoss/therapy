@@ -217,7 +217,7 @@ def view_session(request, therapy_session_id):
 
 def mark_attendance(request, therapy_session_id , attendance):
 	therapy_session = TherapySession.objects.filter(pk=therapy_session_id).first()
-	if therapy_session == None or attendance not in [1,2] or request.user != therapysession.therapist.user:
+	if therapy_session == None or attendance not in [1,2] or request.user != therapy_session.therapist.user:
 		return redirect('view_session', therapy_session.id)
 	if attendance == 1:
 		therapy_session.occured = True
