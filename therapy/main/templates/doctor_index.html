@@ -23,7 +23,7 @@
 		<ul>
 		{% for appointment in request.user.therapist.therapysession_set.all %}
 			{% if appointment.patient %}
-				<a class="btn btn-outline-dark" href="">Appointment with {{appointment.patient.user.first_name}} {{appointment.patient.user.last_name}}<br>{{appointment.datetime}}</a>
+				<a class="btn btn-outline-dark" href="{% url 'view_session' appointment.id %}">Appointment with {{appointment.patient.user.first_name}} {{appointment.patient.user.last_name}}<br>{{appointment.datetime}}</a>
 			{% endif %}
 		{% endfor %}
 		</ul>
