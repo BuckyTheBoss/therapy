@@ -30,7 +30,9 @@ urlpatterns = [
 
     path('book/<int:therapist_id>', views.book_session, name='book_session'),
     path('showimage', views.showimage, name='showimage'),
-    path('pick_session/<int:therapy_session_id>', views.pick_session, name='pick_session')
+    path('pick_session/<int:therapy_session_id>', views.pick_session, name='pick_session'),
+    path('view_appointment/<int:therapy_session_id>', views.view_session, name='view_session'),
+    path('mark_attendance/<int:therapy_session_id>/<int:attendance>', views.mark_attendance, name='mark_attendance')
 ]
 
 

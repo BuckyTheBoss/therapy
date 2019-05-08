@@ -16,14 +16,6 @@ class UserForm(forms.ModelForm):
 		model = User
 		fields = ('first_name', 'last_name', 'email')
 
-# class PatientForm(ModelForm):
-#   class Meta:
-#       model = Patient
-#       fields = ('category', 'gender', 'birthdate', 'bio')
-
-#   def __init__(self, *args, **kwargs):
-#       super(PatientForm, self).__init__(*args, **kwargs)
-#       self.fields['category'].queryset = Category.objects.all()
 
 
 class PatientForm(forms.ModelForm):
@@ -74,11 +66,6 @@ class TherapistForm(forms.ModelForm):
 				attrs={
 				'append' : 'fa fa-calendar',
 				'icon_toggle': True},) 
-
-			# 'working_day' : forms.MultipleChoiceField(
-			# 	required=False,
-			# 	widget=forms.CheckboxSelectMultiple,
-			# 	choices=WORKING_DAY,)
 			}
 
 	def __init__(self, *args, **kwargs):
@@ -93,29 +80,7 @@ class TherapistForm(forms.ModelForm):
 		instance.categories.add(*self.cleaned_data['categories'])
 		return instance
 
-# class TestAppointmentForm(forms.ModelForm):
-# 	class Meta:
-# 		model = TestSession
-# 		fields = ('session_time',)
-# 		widgets = DateTimePicker(
-# 			options={
-# 				'minDate': (
-# 					datetime.date.today() + datetime.timedelta(days=1)
-# 				).strftime(
-# 					'%Y-%m-%d'
-# 				),  # Tomorrow
-# 				'useCurrent': True,
-# 				'collapse': False,
-# 				'sideBySide': True,
-# 				'daysOfWeekDisabled': [0,2,4,5,6], 
-# 				'enabledHours': [10, 11, 12],
-
-# 			},
-# 			attrs={
-# 				'append': 'fa fa-calendar',
-# 				'icon_toggle': True,
-# 			}
-# 		),        
+     
 
 class CustomUserCreationForm(UserCreationForm):
 	class Meta:
@@ -123,61 +88,13 @@ class CustomUserCreationForm(UserCreationForm):
 		fields = ('username', 'email')
 
 
-class AppoinmentForm(forms.Form):
-	# date_field = forms.DateField(widget=DatePicker())
-	# Available_dates = forms.DateField(
-	#     required=True,
-	#     widget=DatePicker(
-	#         options=
-	#         {
-	#         'daysOfWeekDisabled': [1,4],
-	#         }, 'sideBySide'=True,
-	#         # options={
-	#         #     'minDate': 'today',
-	#         #     'maxDate': '2020-01-01',
-	#         # },
-			
-	#     ),
-	# )
-	# Select_a_time = forms.TimeField(
-	#     widget=TimePicker(
-	#         options={
-	#             'enabledHours': [9, 10, 11, 12, 13, 14, 15, 16],
-	#         },
-	#         attrs={
-	#             'input_toggle': True,
-	#             'input_group': True,
-	#         },
-	   
-	#     ),
-	# )
-	Select_an_available_session = forms.DateTimeField(
-		widget=DateTimePicker(
-			options={
-				'minDate': (
-					datetime.date.today() + datetime.timedelta(days=1)
-				).strftime(
-					'%Y-%m-%d'
-				),  # Tomorrow
-				'useCurrent': True,
-				'collapse': False,
-				'sideBySide': True,
-				'daysOfWeekDisabled': [0,2,4,5,6], 
-				'enabledHours': [10, 11, 12, 14],
-
-			},
-			attrs={
-				'append': 'fa fa-calendar',
-				'icon_toggle': True,
-			}
-		),
-	)
-
-
-
-
-
 class ImageForm(forms.ModelForm):
     class Meta:
         model= Image
         fields= ["name", "imagefile"]
+
+
+class TherapistSessionLogForm(forms.ModelForm):
+	class Meta:
+		model=SessionLog
+		fields=("therapist_notes",)

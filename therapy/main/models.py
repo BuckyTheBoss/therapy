@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+
 from tempus_dominus.widgets import DatePicker, TimePicker, DateTimePicker
 
 class Day(models.Model):
@@ -62,15 +63,6 @@ def save_user_profile(sender, instance, **kwargs):
 	else:
 		Therapist.objects.get_or_create(user = instance)
 
-class Match(models.Model):
-	patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-	therapist = models.ForeignKey(Therapist, on_delete=models.CASCADE)
-	timestamp = models.DateTimeField(default=timezone.now)
-
-	def __str__(self):
-		return str(self.timestamp)
-		# example: 2019-05-06 12:08:05.323857+00:00
-
 
 class TherapySession(models.Model):
 	datetime = models.DateTimeField()
@@ -78,54 +70,12 @@ class TherapySession(models.Model):
 	therapist = models.ForeignKey(Therapist, on_delete=models.CASCADE, null=True)
 	patient = models.ForeignKey(Patient, on_delete=models.CASCADE, null=True)
 
-	# def __str__(self):
-	# 	# return str(self.datetime)
-	# 	return datetime.strftime('%m/%d/%Y')
-
-class TestSession(models.Model):
-	session_time = models.DateTimeField()
-	
-	def __str__(self):
-		return f"{self.session_time}"
-	# session_time = models.DateTimeField(
-	# 	DateTimePicker(
-	# 		options={
-	# 			'minDate': (
-	# 				d2atetime.date.today() + datetime.timedelta(days=1)
-	# 			).strftime(
-	# 				'%Y-%m-%d'
-	# 			),  # Tomorrow
-	# 			'useCurrent': True,
-	# 			'collapse': False,
-	# 			'sideBySide': True,
-	# 			'daysOfWeekDisabled': [0,2,4,5,6],
-	# 			'enabledHours': [10, 11, 12],
-
-	# 		},
-	# 		attrs={
-	# 			'append': 'fa fa-calendar',
-	# 			'icon_toggle': True,
-	# 		}
-	# 	),
-	# )
 
 class SessionLog(models.Model):
 	therapist_notes = models.TextField(null=True)
 	patient_notes = models.TextField(null=True)
 	therapysession = models.ForeignKey(TherapySession, on_delete=models.SET_NULL, null=True)
 
-class Questionnaire(models.Model):
-	q1 = models.TextField()
-	q2 = models.TextField()
-	q3 = models.TextField()
-	q4 = models.TextField()
-	q5 = models.TextField()
-	a1 = models.TextField()
-	a2 = models.TextField()
-	a3 = models.TextField()
-	a4 = models.TextField()
-	a5 = models.TextField()
-	match = models.ForeignKey(Match, on_delete=models.CASCADE)
 
 class Chat(models.Model):
 	patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
@@ -143,9 +93,6 @@ class Message(models.Model):
 	chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
 	timestamp = models.DateTimeField(default=timezone.now)
 	read = models.BooleanField(default=False)
-
-
-
 
 
 class Image(models.Model):

@@ -192,3 +192,33 @@ def showimage(request):
     return render(request, 'image.html', context)
 
     
+def view_session(request, therapy_session_id):
+	appointment = TherapySession.objects.filter(pk=therapy_session_id).first()
+	if request.method == 'POST':
+		form = TherapistSessionLogForm(request.POST)
+		if form.is_valid():
+			log = form.save(commit=False)
+			log.therapysession = appointment
+			log.save()
+			return redirect('view_session', appointment.id)
+	now = timezone.now()
+	all_appts = TherapySession.objects.filter(therapist=appointment.therapist, patient=appointment.patient)
+	session_logs = []
+	for appt in all_appts:
+		session_logs.append(SessionLog.objects.filter(therapysession=appt).first())
+
+	form = TherapistSessionLogForm()
+	return render(request, 'doc_view_appt.html', {'appointment' : appointment, 'now' : now, 'session_logs' : session_logs, 'form' : form})
+
+
+def mark_attendance(request, therapy_session_id , attendance):
+	therapy_session = TherapySession.objects.filter(pk=therapy_session_id).first()
+	if therapy_session == None or attendance not in [1,2] or request.user != therapysession.therapist.user:
+		return redirect('view_session', therapy_session.id)
+	if attendance == 1:
+		therapy_session.occured = True
+
+	else:
+		therapy_session.occured = False
+	therapy_session.save()	
+	return redirect('view_session', therapy_session.id)
