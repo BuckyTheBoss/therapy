@@ -14,8 +14,14 @@ class Day(models.Model):
 	name = models.CharField(max_length=20)
 	daycode = models.IntegerField(null=True)
 
+	def __str__(self):
+		return f"{self.name}"
+
 class Hour(models.Model):
 	name = models.IntegerField()
+
+	def __str__(self):
+		return f"{self.name}"
 
 class User(AbstractUser):
 	is_patient = models.BooleanField(default=True)
