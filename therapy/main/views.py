@@ -222,8 +222,7 @@ def mark_attendance(request, therapy_session_id , attendance):
 		return redirect('view_session', therapy_session.id)
 	if attendance == 1:
 		therapy_session.occured = True
-
-	else:
+	elif attendance == 0:
 		therapy_session.occured = False
 	therapy_session.save()	
 	return redirect('view_session', therapy_session.id)
