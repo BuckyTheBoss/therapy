@@ -12,7 +12,7 @@
 						<h2 class="ml-5">Scheduled for: {{appointment.datetime}}</h2>
 						<h2 class="ml-5">Did your patient show up?</h2>
 						<a href="{% url 'mark_attendance' appointment.id 1 %}" class="btn btn-outline-success ml-5">Yes</a>
-						<a href="{% url 'mark_attendance' appointment.id 0 %}" class="btn btn-outline-danger ">No</a>
+						<a href="{% url 'mark_attendance' appointment.id 2 %}" class="btn btn-outline-danger ">No</a>
 					{% endif %}
 
 				{% elif appointment.occured == True %}
@@ -28,8 +28,10 @@
 					{% endif %}
 				{% elif appointment.occured == False %}
 					<h2 class="ml-5">Scheduled for: {{appointment.datetime}}</h2>
-					<h2>Patient did not show up.</h2>
-					<a href="{% url 'doc_chat' chat.id %}">Chat</a>
+					<h2 class="ml-5">Patient did not show up.</h2>
+					{% if chat%}
+					<a class="btn btn-primary ml-5" href="{% url 'doc_chat' chat.id %}">Chat</a>
+					{% endif %}
 				{% endif %}
 			</div>
 		</div>

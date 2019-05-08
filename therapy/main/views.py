@@ -195,7 +195,7 @@ def showimage(request):
     
 def view_session(request, therapy_session_id):
 	appointment = TherapySession.objects.filter(pk=therapy_session_id).first()
-	chat = Chat.objects.filter(therapist=request.user.therapist, patient=appointment.patient)
+	chat = Chat.objects.filter(therapist=request.user.therapist, patient=appointment.patient).first()
 	if request.user != appointment.therapist.user:
 		return redirect('index')
 
@@ -222,7 +222,7 @@ def mark_attendance(request, therapy_session_id , attendance):
 		return redirect('view_session', therapy_session.id)
 	if attendance == 1:
 		therapy_session.occured = True
-	elif attendance == 0:
+	elif attendance == 2:
 		therapy_session.occured = False
 	therapy_session.save()	
 	return redirect('view_session', therapy_session.id)
