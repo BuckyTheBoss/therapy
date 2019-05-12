@@ -15,8 +15,6 @@ from django.utils import timezone
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.contrib.auth import login, authenticate
-from .models import Image
-from .forms import ImageForm
 from datetime import timedelta
 
 def profile_edit(request, id):
@@ -192,8 +190,6 @@ def showimage(request):
     context= {'imagefile': imagefile,
               'form': form
               }
-    
-      
     return render(request, 'image.html', context)
 
     

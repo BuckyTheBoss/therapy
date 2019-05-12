@@ -44,7 +44,7 @@ class Therapist(models.Model):
 	bio = models.TextField(null=True)
 	working_days = models.ManyToManyField(Day)
 	working_hours = models.ManyToManyField(Hour)
-
+	picture = models.ImageField(upload_to='media/images/',default=None, null=True, blank=True)
 
 
 class Patient(models.Model):
@@ -53,6 +53,7 @@ class Patient(models.Model):
 	gender = models.CharField(max_length=30, null=True)
 	birthdate = models.DateField(null=True)
 	bio = models.TextField(null=True)
+	picture = models.ImageField(upload_to='media/images/',default=None, null=True, blank=True)
 
 
 @receiver(post_save, sender=User)
@@ -101,9 +102,9 @@ class Message(models.Model):
 	read = models.BooleanField(default=False)
 
 
-class Image(models.Model):
-    name= models.CharField(max_length=500)
-    imagefile= models.FileField(upload_to='images/', null=True, verbose_name="")
+# class Image(models.Model):
+#     name= models.CharField(max_length=500)
+#     imagefile= models.FileField(upload_to='images/', null=True, verbose_name="")
 
-    def __str__(self):
-        return self.name + ": " + str(self.imagefile)
+#     def __str__(self):
+#         return self.name + ": " + str(self.imagefile)

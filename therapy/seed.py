@@ -88,7 +88,8 @@ def seed_patient_profile():
 		profile.categories.add(pick_category())
 		profile.bio = gen_sentance()
 		profile.birthdate = gen_birthdate()
-		profile.gender = random.choice(['M','F']) 
+		profile.gender = random.choice(['M','F'])
+		profile.picture = '/media/images/dogpatient.jpg' 
 		profile.save()
 
 def create_categories():
@@ -109,6 +110,7 @@ def seed_therapist():
 		profile.address = gen_address()
 		profile.experience = random.randint(1,15)
 		profile.languages = random.choice(['English', 'Hebrew', 'Klingon', 'Elvish'])
+		profile.picture = '/media/images/catshrink.jpg'
 		profile.save()
 
 
@@ -198,14 +200,13 @@ if Category.objects.all().count() == 0:
 
 
 if Therapist.objects.all().count() == 0:
-	create_therapist_users(10)
+	create_therapist_users(4)
 	seed_therapist()
 	seed_doc_day_times()
 
 if Patient.objects.all().count() == 0:
-	create_patient_users(10)
+	create_patient_users(4)
 	seed_patient_profile()
-
 
 if TherapySession.objects.all().count() == 0:
 	seed_appts()

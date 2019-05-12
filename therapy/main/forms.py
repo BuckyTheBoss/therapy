@@ -91,10 +91,10 @@ class CustomUserCreationForm(UserCreationForm):
 		fields = ('username', 'email')
 
 
-class ImageForm(forms.ModelForm):
-    class Meta:
-        model= Image
-        fields= ["name", "imagefile"]
+# class ImageForm(forms.ModelForm):
+#     class Meta:
+#         model= Image
+#         fields= ["name", "imagefile"]
 
 
 class TherapistSessionLogForm(forms.ModelForm):
