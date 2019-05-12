@@ -17,7 +17,6 @@ class UserForm(forms.ModelForm):
 		fields = ('first_name', 'last_name', 'email')
 
 
-
 class PatientForm(forms.ModelForm):
 	class Meta:
 		model = Patient
@@ -50,11 +49,16 @@ class PatientForm(forms.ModelForm):
 class TherapistForm(forms.ModelForm):
 	class Meta:
 		model = Therapist
-		fields = ('address', 'experience', 'education', 'languages', 'categories', 'gender', 'birthdate', 'bio', 'working_days')
+		fields = ('address', 'experience', 'education', 'languages', 'categories', 'gender', 'birthdate', 'bio', 'working_days', 'working_hours')
 		
 		categories = forms.ModelMultipleChoiceField(queryset=Category.objects.all())
 		working_days = forms.ModelMultipleChoiceField(
 				queryset=Day.objects.all(),
+				widget=forms.CheckboxSelectMultiple
+				)
+
+		working_hours = forms.ModelMultipleChoiceField(
+				queryset=Hour.objects.all(),
 				widget=forms.CheckboxSelectMultiple
 				)
 		
@@ -80,7 +84,6 @@ class TherapistForm(forms.ModelForm):
 		instance.categories.add(*self.cleaned_data['categories'])
 		return instance
 
-     
 
 class CustomUserCreationForm(UserCreationForm):
 	class Meta:

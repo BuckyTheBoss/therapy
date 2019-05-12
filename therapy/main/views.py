@@ -44,7 +44,7 @@ def doctor_profile_edit(request, doc_id):
 	form2 = UserForm(instance=therapist.user)
 	if request.method == "POST":
 		form = TherapistForm(request.POST, instance=therapist)
-		form2 = UserForm(request.POST, instance=patient.user)
+		form2 = UserForm(request.POST, instance=therapist.user)
 		if form.is_valid() and form2.is_valid():
 			form.save()
 			form2.save()

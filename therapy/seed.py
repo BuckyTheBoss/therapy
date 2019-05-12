@@ -167,6 +167,7 @@ def seed_appts():
 					appt_list.append(t_session)
 	TherapySession.objects.bulk_create(appt_list)
 
+
 def seed_new_appts():
 	appt_list = []
 	days = date_list(TherapySession.objects.last().datetime)
@@ -184,7 +185,6 @@ def seed_new_appts():
 					t_session = TherapySession(datetime=appt_dt, therapist=profile)
 					appt_list.append(t_session)
 	TherapySession.objects.bulk_create(appt_list)
-
 
 
 if Hour.objects.all().count() == 0:
