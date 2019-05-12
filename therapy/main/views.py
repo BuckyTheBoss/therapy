@@ -1,9 +1,8 @@
 import pytz, datetime
-
+from django.db.models import Max
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.core.mail import send_mail, EmailMessage
-from django.core.mail import send_mail
 from django.http import HttpResponse
 from therapy.middleware.login_exempt import login_exempt
 from .models import *
@@ -12,12 +11,13 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponse
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils import timezone
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.contrib.auth import login, authenticate
 from .models import Image
 from .forms import ImageForm
-
+from datetime import timedelta
 
 def profile_edit(request, id):
 	if not request.user.is_patient:
@@ -58,13 +58,17 @@ def doctor_profile(request, doc_id):
 def doctor_index(request):
 	'''this will have the initial chat space'''
 	chats = Chat.objects.filter(therapist=request.user.therapist)
-	return render(request, 'doctor_index.html', {'chats' : chats})
+	q1 = TherapySession.objects.values('patient').distinct().annotate(x=Max('id'))
+	appts = TherapySession.objects.filter(id__in=[i["x"] for i in q1])
+	weekly_appts = TherapySession.objects.filter(therapist=request.user.therapist, datetime__gte=(timezone.now() + timedelta(days=7)), patient__isnull=False)
+	return render(request, 'doctor_index.html', {'chats' : chats, 'appts' : appts, 'weekly_appts' : weekly_appts })
 
 def index(request):
 	if not request.user.is_patient:
 		return redirect('doctor_index')
 	therapists = Therapist.objects.filter(categories__in=request.user.patient.categories.all()).distinct()
-	return render(request, 'index.html', {'therapists' : therapists})
+	next_appt = TherapySession.objects.filter(patient=request.user.patient, datetime__gte=timezone.now()).order_by('datetime').first()
+	return render(request, 'index.html', {'therapists' : therapists, 'next_appt' : next_appt})
 
 def patient_matched_index(request):
 	return render(request, 'patient_matched_index.html')

@@ -5,9 +5,9 @@
 		<img src="">
 		<ul class="list-group">
 			<li class="list-group-item mt-3">{{request.user.first_name}} {{request.user.last_name}}</li>
-			<li class="list-group-item mt-3">Total Patients: {number}</li>
+			<li class="list-group-item mt-3">Total Patients: {{appts.count}}</li>
 			<li class="list-group-item mt-3">Joined TheraTinder: {{request.user.date_joined}}</li>
-			<li class="list-group-item mt-3">Appointments this week: {number}</li>
+			<li class="list-group-item mt-3">Appointments this week: {{weekly_appts.count}}</li>
 		</ul>
 	</div>
 	<div class="col-5">
